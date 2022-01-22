@@ -4,6 +4,32 @@
 // 不要抛出warning警告
 type File = String; // 类型别名
 
+#[derive(Debug)]
+struct User {
+    name: String,
+    active: bool,
+    sign_in_count: i64,
+}
+
+fn build_user(name: String, active: bool, sign_in_count: i64) -> User {
+    User {
+        name,
+        active,
+        sign_in_count,
+    }
+}
+
+#[derive(Debug)] // 可以格式化打印
+struct Color(i32, i32, i32); // 元组结构体
+
+// 枚举类型
+enum Poker {
+    Clubs,
+    Spades,
+    Diamonds,
+    Hearts,
+}
+
 fn main() {
     println!("Hello, world!");
 
@@ -101,6 +127,69 @@ fn main() {
 
     println!("访问tup.0 = {}", tup.0);
     println!("{:?}", cal("heige".to_string())); // ("heige", 5)
+
+    let u = build_user("daehige".to_string(), true, 1);
+    // user = User { name: "daehige", active: true, sign_in_count: 1 }
+    println!("user = {:?}", u);
+
+    let u2 = User {
+        name: "heige".to_string(), // 除了这个字段外，其他字段用u的字段填充
+        ..u
+    };
+    println!("u.active = {}", u.active);
+    println!("user = {:?}", u);
+    println!("user2 = {:?}", u2);
+
+    let user1 = User {
+        name: String::from("heige"),
+        active: true,
+        sign_in_count: 1,
+    };
+    let user2 = User {
+        active: user1.active,
+        name: user1.name,
+        sign_in_count: user1.sign_in_count,
+    };
+    println!("{}", user1.active);
+    // 下面这行会报错
+    // println!("{:?}", user1) // ^^^^^ value borrowed here after partial move
+
+    let c = Color(1, 23, 235);
+    println!("c = {:?}", c);
+    let p = Poker::Clubs; // 枚举通过match来枚举
+    match p {
+        Poker::Clubs => println!("match success"),
+        _ => println!("not match"),
+    }
+
+    // Option枚举用于处理空值
+    /**
+    enum Option<T> {
+    Some(T), // 表示有值,T是泛型参数，Some(T)表示该枚举成员的数据类型是T
+    None, // 没有值
+    }*/
+    let some_number = Some(5);
+    // 对于option采用match来匹配
+    match some_number {
+        Some(number) => println!("number = {}", number),
+        None => println!("not found value"),
+    }
+    // 第二种匹配模式if let Some
+    if let Some(number) = some_number {
+        println!("number: {}", number);
+    }
+
+    // array
+    let arr = [1, 2, 3, 4, 5]; // 数组的元素类型要一样
+    println!("arr = {:?}", arr);
+
+    let arr: [i32; 3] = [1, 2, 3]; // 声明的时候指定类型
+    println!("arr2 = {:?}", arr);
+    println!("arr[0]= {}", arr[0]);
+    // 通过数组生成切片
+    let s: &[i32] = &arr[1..3];
+    println!("s = {:?}", s); // s = [2, 3] 切片cap,len,ptr指向数组底层的某个元素开始位置的内存地址
+    println!("arr = {:?}", arr);
 }
 
 // 元组在函数返回值场景很常用，例如下面的代码，可以使用元组返回多个值:
