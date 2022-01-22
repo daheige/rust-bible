@@ -215,6 +215,9 @@ fn main() {
     let s: &[i32] = &arr[1..3];
     println!("s = {:?}", s); // s = [2, 3] 切片cap,len,ptr指向数组底层的某个元素开始位置的内存地址
     println!("arr = {:?}", arr);
+
+    let p = Point::new(1, 2);
+    p.print();
 }
 
 // 元组在函数返回值场景很常用，例如下面的代码，可以使用元组返回多个值:
@@ -235,4 +238,30 @@ fn open(f: &mut File) -> bool {
 
 fn close(f: &mut File) -> bool {
     true
+}
+
+// 泛型
+// 泛型的性能：
+// Rust 通过在编译时进行泛型代码的 单态化（monomorphization）来保证效率。
+// 单态化是一个通过填充编译时使用的具体类型，将通用代码转换为特定代码的过程。
+
+// 定义泛型结构体，这里的T是任意类型
+#[derive(Debug)]
+struct Point<T> {
+    x: T,
+    y: T,
+}
+
+// impl<T>本质上就是为指定类型T为任意类型
+impl<T> Point<T> {
+    fn new(x: T, y: T) -> Self {
+        Self { x, y }
+    }
+}
+
+// 为特定类型的泛型结构体定义方法
+impl Point<i32> {
+    fn print(&self) {
+        println!("point.x = {},point.y = {}", self.x, self.y);
+    }
 }
