@@ -19,6 +19,29 @@ fn build_user(name: String, active: bool, sign_in_count: i64) -> User {
     }
 }
 
+// 给结构体定义方法
+// 使用方法代替函数有以下好处：
+//
+//     不用在函数签名中重复书写 self 对应的类型
+//     代码的组织性和内聚性更强，对于代码维护和阅读来说，好处巨大
+
+impl User {
+    // &self作为第一个参数，表示借用self,只读，不获取self的所有权
+    fn print_name(&self) {
+        println!("current name = {}", self.name);
+    }
+
+    // 关联函数，它没有 self，相当于静态方法，可以直接调用
+    fn new(name: String, active: bool, sign_in_count: i64) -> Self {
+        Self {
+            // 这里Self实际上就是结构体本身User名字
+            name,
+            active,
+            sign_in_count,
+        }
+    }
+}
+
 #[derive(Debug)] // 可以格式化打印
 struct Color(i32, i32, i32); // 元组结构体
 
@@ -153,6 +176,8 @@ fn main() {
     println!("{}", user1.active);
     // 下面这行会报错
     // println!("{:?}", user1) // ^^^^^ value borrowed here after partial move
+    let u = User::new("heige".to_string(), true, 10);
+    u.print_name();
 
     let c = Color(1, 23, 235);
     println!("c = {:?}", c);
