@@ -1,4 +1,5 @@
 #![allow(unused_variables)]
+use std::fmt::Display;
 // Rust在编译的时候会扫描代码，变量声明后未使用会以warning警告的形式进行提示），
 // 引入#![allow(unused_variables)]属性标记，该标记会告诉编译器忽略未使用的变量，
 // 不要抛出warning警告
@@ -259,9 +260,17 @@ impl<T> Point<T> {
     }
 }
 
+// 通过trait特征约束来实现display
+// 使用特征约束有条件的实现方法或特征
+impl<T: Display> Point<T> {
+    fn print(&self) {
+        println!("point.x = {},point.y = {}", self.x, self.y);
+    }
+}
+
 // 为特定类型的泛型结构体定义方法
 impl Point<i32> {
-    fn print(&self) {
+    fn print2(&self) {
         println!("point.x = {},point.y = {}", self.x, self.y);
     }
 }
