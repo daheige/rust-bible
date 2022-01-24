@@ -218,6 +218,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "redis-demo"
+version = "0.1.0"
+dependencies = [
+ "redis",
+]
+
+[[package]]
 name = "sha1"
 version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -270,13 +277,6 @@ dependencies = [
  "mio",
  "pin-project-lite",
  "winapi",
-]
-
-[[package]]
-name = "tokio-demo"
-version = "0.1.0"
-dependencies = [
- "redis",
 ]
 
 [[package]]
