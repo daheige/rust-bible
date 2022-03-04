@@ -57,6 +57,8 @@ enum Poker {
 fn main() {
     println!("Hello, world!");
 
+    println!("add(1) = {}", add(1));
+
     let mut f1 = File::from("abc");
     open(&mut f1);
 
@@ -219,6 +221,12 @@ fn main() {
 
     let p = Point::new(1, 2);
     p.print();
+}
+
+// 函数定义关键字fn，返回值通过->来定义
+fn add(mut i: i32) -> i32 {
+    i += 1;
+    i
 }
 
 // 元组在函数返回值场景很常用，例如下面的代码，可以使用元组返回多个值:

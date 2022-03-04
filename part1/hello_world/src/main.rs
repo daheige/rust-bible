@@ -13,4 +13,6 @@ fn greet_world() {
         // 迭代遍历
         println!("region:{region}"); // 这个特性是v1.58.0加入的，低版本不会对变量进行替换处理
     }
+
+    println!("hello");
 }

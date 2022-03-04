@@ -16,7 +16,7 @@ fn main() {
     // 定义常量
     // 常量可以在任意作用域内声明，包括全局作用域，在声明的作用域内，常量在程序运行的整个过程中都有效
     // rust语言中，常量全部大写，下划线分割
-    const MAX_POINTS: u32 = 10_000;
+    const MAX_POINTS: u32 = 10_000; // 常量默认大写通过下划线_来分割
     println!("max_points = {MAX_POINTS}"); // max_points = 10000
 
     // 变量遮蔽功能
@@ -29,13 +29,30 @@ fn main() {
     let x = true; // 后面的这个x将前面的变量给遮蔽了
     println!("new x = {x}");
 
-    // 数据类型
-    let x = 1.2; // 默认自行推导位f64
+    // 数据类型，rust在编译的时候就知道变量的类型
+    let x = 1.2; // rust默认自行推导为f64
     println!("float x = {x}");
 
     // y 接着: 指定具体的类型
     let y: f32 = 1.3;
     println!("y = {y}");
+
+    let t = true; // 布尔值true,false
+    if t {
+        println!("1111");
+    }
+
+    // 字符类型
+    let c = 'a';
+    println!("{}", c);
+
+    // 复合类型 tuple元组,array 数组
+    let tup = (1, 2, 3);
+    println!("tup: {:?}", tup);
+
+    // 数组类型
+    let arr = [1, 2, 3, 4]; // i32类型的数组
+    println!("arr:{:?}", arr);
 
     // 数字运算
     let sum = 5 + 10;
