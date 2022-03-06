@@ -14,7 +14,7 @@ fn main() {
         "daheige".to_string(),
         "rust".to_string(),
     );
-    println!("{}", p2.get_title());
+    println!("p2 title: {}", p2.get_title());
     println!("{}", p2.summarize());
     println!("{}", p2.summarize_author());
 
@@ -22,6 +22,7 @@ fn main() {
     output_content(&p2);
 }
 
+// 定义trait特征
 pub trait Summary {
     fn summarize(&self) -> String;
     fn get_title(&self) -> String {
