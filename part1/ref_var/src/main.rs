@@ -26,13 +26,14 @@ fn main() {
     // println!("s1 = {},s2 = {},s = {}", s1, s2, s); // s1 -- immutable borrow later used here
 
     let mut s = String::from("daheige");
-    let s1 = &s; //  -- immutable borrow occurs here
+    let s1 = &s;
     let s2 = &s;
     println!("s1 = {},s2 = {}", s1, s2); // 引用作用域的结束位置从花括号变成最后一次使用的位置
 
     let s3 = &mut s; // 可变引用
 
     println!("s3 = {}", s3);
+    // println!("s1 {},s2 {},s3 = {}", s1, s2, s3);
 
     println!("no_dangle() = {}", no_dangle())
 }
