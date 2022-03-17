@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 #[derive(Debug)] // 允许枚举可display debug
 enum SpreadsheetCell {
     Int(i64),
@@ -104,4 +106,26 @@ fn main() {
     }
 
     // rust中通过准确的方式处理string 类型，作为默认类型，并且是是utf-8合法的字符串，确实是复杂，但是是安全的
+
+    // 对于hash map 使用，它是一个key/val键值对
+    let mut m = HashMap::new();
+
+    /*
+     // insert是一个泛型函数,k,v是任意类型
+     pub fn insert(&mut self, k: K, v: V) -> Option<V> {
+        self.base.insert(k, v)
+    }
+     */
+    m.insert("a",1);
+    // m.insert(1,2); // 这里是不行的，因为上面一行已经确定了k的类型是&str
+    m.insert("b",2);
+    // 访问hash元素
+    println!("access m");
+    println!("m[a]= {}",m["a"]);
+
+    // 通过get访问
+    let v = m.get("a"); // 是一个Option<&i32> 可能有值的option
+    println!("get m[0] {:?}",v);
+
+
 }
