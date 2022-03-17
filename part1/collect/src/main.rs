@@ -127,5 +127,10 @@ fn main() {
     let v = m.get("a"); // 是一个Option<&i32> 可能有值的option
     println!("get m[0] {:?}",v);
 
+    m.entry("c").or_insert(3); // 只有在键不存在就插入c
+    m.insert("c",35);  // 以覆盖的方式更新原来的值
 
+   for (key,value) in &m{
+       println!("key:{} value:{}",key,value);
+   }
 }
