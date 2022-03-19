@@ -50,7 +50,7 @@
     在src 同一层新建tests目录,测试用例写法：
 ```rust
 #[test]
-fn test_print(){
+fn test_println(){
     println!("{}",12);
 }
 ```
