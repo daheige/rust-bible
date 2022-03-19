@@ -137,7 +137,7 @@ pub fn notify<T: Summarizable>(item: T) {
     println!("news: {}", item.summary());
 }
 
-// 特征对象通过&dyn trait name 来进行特征分发
+// 特征对象通过&dyn trait name 或&mut dyn trait来进行特征分发
 // 可以创建多态api，这种方式被声明为实现了某个特征api,就是特征对象
 // 特征对象实现实际上一个胖指针，并且是不定长类型，需要在引用符号后面使用
 fn show_me(item: &dyn Summarizable) {
@@ -288,7 +288,7 @@ fn main() {
     let p = create_person("heige".to_string(), 32);
     p.output();
 
-    // 特征对象动态分发规则
+    // trait object 特征对象动态分发规则
     // trait特征动态分发 通过关键字dyn来处理
     let a1 = Art::new("post1".to_string(), "heige".to_string(), "rust study".to_string());
     let a2 = Art::new("post2".to_string(), "daheige".to_string(), "rust study".to_string());
