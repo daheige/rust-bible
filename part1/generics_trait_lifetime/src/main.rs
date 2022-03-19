@@ -1,4 +1,5 @@
 use std::cmp::PartialOrd;
+use std::fmt::Display;
 use std::ops::Deref;
 
 // 结构体泛型 T是任意类型
@@ -8,6 +9,28 @@ struct Point<T> {
     x: T,
     y: T,
 }
+
+// 为泛型结构体添加方法
+impl<T> Point<T> {
+    // 关联方法（静态方法）不需要self作为参数
+    fn new(x: T, y: T) -> Self {
+        Self {
+            x,
+            y,
+        }
+    }
+
+    // where约定trait
+    fn cmp_display(&self) where T: Display + PartialOrd {
+        if self.x >= self.y {
+            println!("the max is x = {}", self.x);
+            return;
+        }
+
+        println!("the mas is y = {}", self.y);
+    }
+}
+
 
 // 不同类型的T,U泛型结构体
 #[derive(Debug)]
@@ -217,9 +240,11 @@ fn create_person(name: String, age: u8) -> impl Descriptive {
 fn main() {
     println!("Hello, world!");
     let p = Point { x: 1, y: 2 };
-    let f = Point { x: 1.2, y: 1.3 };
+    let f = Point { x: 3.1, y: 1.3 };
     println!("p:{:?}", p);
     println!("f:{:?}", f);
+    p.cmp_display();
+    f.cmp_display();
 
     let p = Point2 { x: 1, y: 1.2 };
     println!("p.x = {},p.y = {}", p.x, p.y);
@@ -279,3 +304,134 @@ fn main() {
     summary:weibo-hi rust-100
      */
 }
+
+// 下面这个函数是编译不通过，提示生命周期错误
+// 提示返回值，需要一个泛型生命周期
+// rust编译器，不知道是否要返回x,y其中的哪一个
+// borrow checker 编译器的借用检查器，它比较作用域来确定所有的借用都是有效的
+// 需要通过泛型生命周期参数来确定引用之间的作用域关系
+// fn longest(x:&str,y:&str) -> &str{ // ^ expected named lifetime parameter
+//     if x.len() > y.len(){
+//         x
+//     }else{
+//         y
+//     }
+// }
+
+// 生命周期注解的作用就是将多个引用的生命周期联系起来，方便借用检查器能确定引用的具体生命周期，也就是作用域的范围大小
+// 生命周期参数名称通过'a 这种语法来标记，告诉rust多个引用的泛型生命周期参数如何相互联系
+// 生命周期参数注解位于引用的&之后，并有一个空格来将引用类型与生命周期注解分割开
+//
+// &i32 表示一个借用
+// &'a i32 // a reference with an explicit lifetime 引用生命周期注解
+// &'a mut i32 // a mutable reference with an explicit lifetime 可变引用生命周期注解
+//
+// 在函数后面<'a>声明泛型生命周期，同时函数也返回与生命周期'a存在一样长的字符串slice
+// 被 'a 所替代的具体生命周期是 x 的作用域与 y 的作用域相重叠的一部分
+// 下面的生命周期参数'a标注来返回的引用值,所以x,y中生命周期较短的那一个在结束之前保持有效
+// 借用检查器认可这些代码；它能够编译和运行
+// 返回值的生命周期与参数的生命周期需要关联
+//
+// 函数或方法的参数的生命周期被称为 输入生命周期（input lifetimes），
+// 而返回值的生命周期被称 为 输出生命周期（output lifetimes）。
+// 输入型生命周期范围<=输出型生命周期范围
+//
+// 是否需要生命周期的规则：
+// 1.每个引用的参数都有自己的生命周期，如果一个函数存在两个不同的生命周期，就需要声明'a,'b两个生命周期注解
+// 2.如果只有一个输入生命周期参数，那么它就可以省略生命周期
+// 3.如果方法有多个生命周期参数，方法的&self,&mut self，那么就可以省略
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+
+// 结构体中存在引用的话，需要给每个引用添加生命周期注解
+// part存放了字符串slice,这是一个引用，类似于泛型参数类型，必须在结构体后面Tant后面添加<'a>声明泛型生命周期参数
+// 这样就可以在结构体定义中使用生命周期参数
+// 生命周期注解其实是一个泛型类型
+// 每一个引用都有一个生命周期，需要为使用了引用的函数或结构体指定生命周期，这样rust编译器就可以成功编译并运行
+struct Tant<'a> {
+    part: &'a str,
+}
+
+// 方法定义中的生命周期注解'a
+// impl 后面的<'a>生命周期参数必须要有的
+impl<'a> Tant<'a> {
+    fn level(&self) -> i32 {
+        3
+    }
+
+    fn announce(&self, announce: &str) -> &str {
+        println!("attention:{}", announce);
+        self.part
+    }
+}
+
+// 静态生命周期 'static 生命周期存活在整个程序期间，直接存储在程序的二进制文件中
+// 所有的字符串字面量都拥有 'static 生命周期
+// 将一个引用声明为 'static 之前需要考虑清楚，是否要这么做
+fn static_lifetime() {
+    let s: &'static str = "hell rust"; // 这个字符量字符串，生命周期可以省略
+    println!("s = {}", s);
+}
+
+// 结合泛型类型参数，trait bounds 和生命周期
+// ann是一个泛型参数T，它需要实现Display trait 特征，通过where来实现泛型特征的绑定
+// 由于生命周期'a也是泛型，所以和T都同时放在尖括号中，用来定义参数的作用域范围
+fn longest_with_announce<'a, T>(x: &'a str, y: &'a str, ann: T) -> &'a str where T: Display {
+    println!("ann:{}", ann);
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+
+// 省略生命周期的场景,借用检查器可以自行推断生命周期
+fn first_word(s: &str) -> &str {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
+    }
+
+    &s[..]
+}
+
+// 通过#[cfg(test)] 来指定下面的都是测试代码
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+        let s = super::longest("heige", "abc");
+        println!("s = {}", s);
+    }
+
+    #[test]
+    fn struct_lifetimes() {
+        let s = super::Tant {
+            part: "heige",
+        };
+        println!("part: {}", s.part);
+
+        let a = s.announce("abc");
+        println!("a = {}", a);
+    }
+
+    #[test]
+    fn words() {
+        println!("s = {}", super::first_word("hello rust")); // s = hello
+    }
+
+    #[test]
+    fn test_longest_with_ann() {
+        let s = super::longest_with_announce("hello", "rust", 12);
+        println!("s = {}", s);
+    }
+}
+
