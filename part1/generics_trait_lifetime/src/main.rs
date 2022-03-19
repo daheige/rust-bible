@@ -1,4 +1,6 @@
 use std::cmp::PartialOrd;
+use std::ops::Deref;
+
 // 结构体泛型 T是任意类型
 // <T>表示可以任意类型
 #[derive(Debug)]
@@ -67,8 +69,9 @@ impl Summarizable for Art {
         format!("author: {},title:{},content:{}", self.author, self.title, self.content)
     }
 
+    // 覆盖默认实现
     fn display(&self) {
-        println!("{}",self.summary());
+        println!("{}", self.summary());
     }
 }
 
@@ -83,21 +86,21 @@ impl Art {
     }
 }
 
-struct Weibo{
+struct Weibo {
     title: String,
     content: String,
     read_count: i64,
 }
 
-impl Summarizable for Weibo{
+impl Summarizable for Weibo {
     fn summary(&self) -> String {
-        format!("{}-{}-{}",self.title,self.content,self.read_count)
+        format!("{}-{}-{}", self.title, self.content, self.read_count)
     }
 }
 
 impl Weibo {
-    fn new(title :String,content:String,read_count: i64) -> Self{
-        Self{
+    fn new(title: String, content: String, read_count: i64) -> Self {
+        Self {
             title,
             content,
             read_count,
@@ -107,20 +110,24 @@ impl Weibo {
 
 // trait bounds 表示trait 约束
 // 参数是T 它是一个Summarizable trait 就可以调用summary方法
-pub fn notify<T:Summarizable>(item:T){
-    println!("news: {}",item.summary());
+pub fn notify<T: Summarizable>(item: T) {
+    println!("news: {}", item.summary());
+}
+
+fn show_me(item: &dyn Summarizable) {
+    println!("summary: {}", item.summary());
 }
 
 // 在函数中定义泛型
 // 下面是一个i32 slice取得最大值
-fn max(s:&[i32]) -> i32{
+fn max(s: &[i32]) -> i32 {
     let mut max_index = 0;
     let mut i = 1;
-    while  i < s.len() {
-        if s[i] > s[max_index]{
+    while i < s.len() {
+        if s[i] > s[max_index] {
             max_index = i;
         }
-        i+=1;
+        i += 1;
     }
 
     s[max_index]
@@ -128,18 +135,83 @@ fn max(s:&[i32]) -> i32{
 
 // T 指定trait
 // PartialOrd trait 特征可以比较大小
-fn max2<T:PartialOrd>(s :&[T]) -> &T {
+fn max2<T: PartialOrd>(s: &[T]) -> &T {
     let mut max_index = 0;
     let mut i = 1;
-    while  i < s.len() {
-        if s[i] > s[max_index]{
+    while i < s.len() {
+        if s[i] > s[max_index] {
             max_index = i;
         }
 
-        i+=1;
+        i += 1;
     }
 
     &s[max_index]
+}
+
+// 比较操作trait
+trait Comparable {
+    fn cmp(&self, obj: &Self) -> i8;
+}
+
+// 为浮点类型实现Comparable trait
+impl Comparable for f64 {
+    fn cmp(&self, obj: &Self) -> i8 {
+        if &self > &obj {
+            1
+        } else if &self == &obj {
+            0
+        } else {
+            -1
+        }
+    }
+}
+
+fn max3<T: Comparable>(s: &[T]) -> &T {
+    let mut max_index = 0;
+    let mut i = 1;
+    while i < s.len() {
+        // 调用cmp 特征方法
+        if s[i].cmp(&s[max_index]) > 0 {
+            max_index = i;
+        }
+        i += 1;
+    }
+
+    &s[max_index]
+}
+
+
+// 特征作为返回值
+trait Descriptive {
+    fn describe(&self) -> String {
+        String::from("[object]")
+    }
+
+    fn output(&self);
+}
+
+struct Person {
+    name: String,
+    age: u8,
+}
+
+impl Descriptive for Person {
+    fn describe(&self) -> String {
+        format!("name:{} age:{}", self.name, self.age)
+    }
+
+    fn output(&self) {
+        println!("{}", self.describe());
+    }
+}
+
+// 当特征作为返回值，同一个函数中所有可能的返回值类型必须是同一个类型实现的trait才可以
+fn create_person(name: String, age: u8) -> impl Descriptive {
+    Person {
+        name,
+        age,
+    }
 }
 
 fn main() {
@@ -167,17 +239,43 @@ fn main() {
     c3.y = 2.3
      */
 
-    let a = Art::new("hello,rust".to_string(),"heige".to_string(),"wolrd".to_string());
+    let a = Art::new("hello,rust".to_string(), "heige".to_string(), "wolrd".to_string());
     a.display(); // 调用trait特征上面的方法
 
-    let w = Weibo::new("hi,rust".to_string(),"from weibo".to_string(),100);
+    let w = Weibo::new("hi,rust".to_string(), "from weibo".to_string(), 100);
     w.display();
-    println!("summary: {}",w.summary());
+    println!("summary: {}", w.summary());
     notify(w); // 调用notify方法
 
-    let s = [1,2,3,4];
-    println!("max2 {}",max2(&s[..]));
+    let s = [1, 2, 3, 4];
+    println!("max2 {}", max2(&s[..]));
 
-    let s2 = [1.1,1.3,1.5,1.2,1.9,1.8];
-    println!("max2 float {}",max2(&s2[..]));
+    let s2 = [1.1, 1.3, 1.5, 1.2, 1.9, 1.8];
+    println!("max2 float {}", max2(&s2[..]));
+
+    // 通过cmp trait来比较
+    let s3 = [1.1, 1.3, 1.5, 1.2, 1.9, 1.8];
+    println!("max3 float {}", max3(&s3[..]));
+
+    let p = create_person("heige".to_string(), 32);
+    p.output();
+
+    // trait特征动态分发 通过关键字dyn来处理
+    let a1 = Art::new("post1".to_string(), "heige".to_string(), "rust study".to_string());
+    let a2 = Art::new("post2".to_string(), "daheige".to_string(), "rust study".to_string());
+    let w = Weibo::new("weibo".to_string(), "hi rust".to_string(), 100);
+    let s: Vec<&dyn Summarizable> = vec![
+        &a1,
+        &a2,
+        &w,
+    ];
+
+    for v in s {
+        show_me(v); // 调用动态分发的函数
+    }
+    /*
+    summary:author: heige,title:post1,content:rust study
+    summary:author: daheige,title:post2,content:rust study
+    summary:weibo-hi rust-100
+     */
 }
