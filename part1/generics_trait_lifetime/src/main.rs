@@ -1,3 +1,4 @@
+use std::cmp::PartialOrd;
 // 结构体泛型 T是任意类型
 // <T>表示可以任意类型
 #[derive(Debug)]
@@ -126,7 +127,8 @@ fn max(s:&[i32]) -> i32{
 }
 
 // T 指定trait
-fn max2<T:std::cmp::PartialOrd>(s :&[T]) -> &T {
+// PartialOrd trait 特征可以比较大小
+fn max2<T:PartialOrd>(s :&[T]) -> &T {
     let mut max_index = 0;
     let mut i = 1;
     while  i < s.len() {
@@ -175,4 +177,7 @@ fn main() {
 
     let s = [1,2,3,4];
     println!("max2 {}",max2(&s[..]));
+
+    let s2 = [1.1,1.3,1.5,1.2,1.9,1.8];
+    println!("max2 float {}",max2(&s2[..]));
 }
