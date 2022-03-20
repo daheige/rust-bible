@@ -88,3 +88,7 @@ https://kaisery.github.io/trpl-zh-cn/ch01-01-installation.html
 rust程序设计第二版 https://kaisery.github.io/trpl-zh-cn/title-page.html
 
 配套代码 https://github.com/daheige/myrust
+
+# rust crates官网
+在这个官网https://crates.io/
+可以搜到很多有用的第三方包，比如axum,actix-web,tide,serde等等
