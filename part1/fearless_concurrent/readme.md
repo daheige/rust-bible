@@ -53,3 +53,272 @@
     由于 Rust 是较为底层的语言，如果你愿意牺牲性能来换取的抽象，
     以获得对线程运行更精细的控制及更低的上下文切换成本，
     你可以使用实现了 M:N 线程模型的 crate。
+
+# 通过spawn创建线程
+```rust
+use std::thread;
+use std::time::Duration;
+
+fn main() {
+    println!("Hello, world!");
+    // 1.使用 spawn 创建新线程
+    thread::spawn(||{
+        for i in 1..10{
+            println!("spawn thread: current i = {}",i);
+            thread::sleep(Duration::from_millis(1)); // 在独立线程中停顿1ms
+        }
+    });
+
+    for i in 1..5{
+        println!("main thread: i = {}",i);
+        thread::sleep(Duration::from_millis(1));
+    }
+}
+/*当主线程退出了，子线程就会跟着退出
+    Hello, world!
+    main thread: i = 1
+    spawn thread: current i = 1
+    main thread: i = 2
+    spawn thread: current i = 2
+    spawn thread: current i = 3
+    main thread: i = 3
+    main thread: i = 4
+    spawn thread: current i = 4
+    spawn thread: current i = 5*/
+```
+
+# 通过join等待所有线程结束
+    thread::spawn 的返回值类型是 JoinHandle。
+    JoinHandle 是一个拥有所有权的值，当对其调用 join 方法时，它会等待其线程结束
+```rust
+let handler = thread::spawn(||{
+        for i in 1..10{
+            println!("spawn thread: current i = {}",i);
+            thread::sleep(Duration::from_millis(1)); // 在独立线程中停顿1ms
+        }
+    });
+
+    for i in 1..5{
+        println!("main thread: i = {}",i);
+        thread::sleep(Duration::from_millis(1));
+    }
+
+    handler.join().unwrap();
+    println!("main thread will exit...");
+// 执行结果如下：
+/*
+Hello, world!
+main thread: i = 1
+spawn thread: current i = 1
+spawn thread: current i = 2
+main thread: i = 2
+spawn thread: current i = 3
+main thread: i = 3
+spawn thread: current i = 4
+main thread: i = 4
+spawn thread: current i = 5
+spawn thread: current i = 6
+spawn thread: current i = 7
+spawn thread: current i = 8
+spawn thread: current i = 9
+main thread will exit...
+*/
+```
+
+# 线程与 move 闭包
+    move其经常与 thread::spawn 一起使用，
+    因为它允许我们在一个线程中使用另一个线程的数据
+```rust
+let v = vec![1,2,3,4,5];
+let handler = thread::spawn(||{
+        for i in &v {
+            println!("i = {}",i);
+        }
+    });
+handler.join().unwrap();
+    println!("main thread will exit...");
+
+//上面的代码就会报错：
+|     thread::spawn(||{
+   |                   ^^ may outlive borrowed value `v`
+48 |         for i in &v {
+   |                   - `v` is borrowed here
+   |
+note: function requires argument type to outlive `'static`
+  --> src/main.rs:47:5
+   |
+47 | /     thread::spawn(||{
+48 | |         for i in &v {
+49 | |             println!("i = {}",i);
+50 | |         }
+51 | |     });
+   | |______^
+help: to force the closure to take ownership of `v` (and any other referenced variables), use the `move` keyword
+   |
+47 |     thread::spawn(move ||{
+   |                   ++++ 
+```
+
+```rust
+// 通过下面的move来解决
+   let handler = thread::spawn(move ||{
+for i in &v {
+println!("i = {}",i);
+}
+
+println!("v = {:?}",v);
+});
+```
+
+# 使用消息传递在线程间传送数据
+```rust
+#[cfg(test)]
+mod tests{
+    use std::sync::mpsc;
+    use std::thread;
+
+    #[test]
+    fn message_pass(){
+        let (tx,rx) = mpsc::channel(); // 创建一个无限缓冲的通道channel
+        // 发送消息
+        thread::spawn(move ||{ // 这里需要move 将tx所有权移动到闭包中
+            let v = String::from("abc");
+            tx.send(v).unwrap();
+        });
+
+        // 接收消息
+        let msg = rx.recv().unwrap();
+        println!("msg:{}",msg);
+    }
+}
+```
+
+# 发送多个值并观察接收者的等待
+```rust
+// 发送多个值
+    #[test]
+    fn message_pass2(){
+        let (tx,rx) = mpsc::channel();
+        thread::spawn(move ||{
+            let v = vec![1,2,3,4];
+            for val in v {
+                tx.send(val).unwrap();
+            }
+        });
+
+        // 下面就会阻塞，等待发送者发送完毕后就会消费
+        for msg in rx {
+            println!("msg: {}",msg);
+        }
+    }
+```
+
+# 多个生产者模式
+    通过克隆发送者来创建多个生产者
+```rust
+#[test]
+    fn message_mp(){
+        let (tx,rx) = mpsc::channel();
+
+        // 通过tx来克隆一个生产者
+        let tx1 = mpsc::Sender::clone(&tx);
+        thread::spawn(move || {
+            let s = String::from("abc");
+            tx1.send(s).unwrap();
+        });
+
+        thread::spawn(move || {
+            let s = vec![
+                String::from("hello"),
+                String::from("rust"),
+            ];
+            for v in s {
+                tx.send(v).unwrap();
+            }
+        });
+
+        for msg in rx{
+            println!("recv msg: {}",msg);
+        }
+    }
+```
+# 共享状态
+    通过mutex互斥锁来实现
+```rust
+#[test]
+    fn mutex_test(){
+        let mut m = Mutex::new(5);
+        {
+            let mut num = m.lock().unwrap();
+            *num += 6;
+        }
+        println!("m = {:?}",m);
+        println!("m = {:?}",m.get_mut().unwrap());
+        // m = Mutex { data: 11, poisoned: false, .. }
+        // m = 11
+    }
+```
+
+# 在线程中共享Mutex<T>
+```rust
+// 下面的代码不能编译成功
+#[test]
+    fn mutex_share_data(){
+        let counter = Mutex::new(0);
+        // 上面一行不能编译，抛出下面的错误
+        // ------- move occurs because `counter` has type `Mutex<i32>`,
+        // which does not implement the `Copy` trait
+        let mut handlers = vec![];
+        for i in 0..10{
+            // 创建多个线程
+            let handler = thread::spawn(move ||{
+                // 上面一行报错
+                // ^^^^^^^ value moved into closure here, in previous iteration of loop
+                let mut num = counter.lock().unwrap();
+                *num +=i;
+            });
+
+            // 将handle join句柄加入到handlers
+            handlers.push(handler);
+        }
+
+        for handler in handlers{
+            handler.join().unwrap();
+        }
+
+        println!("result: {}",*counter.lock().unwrap());
+    }
+// 上面的代码需要通过多所有权来修复这个问题
+// Arc 多个线程中安全操作的原子引用计数器Arc<T>
+// 像 Mutex<T> 和 Arc<T> 这样可以安全的用于并发上下文的智能指针
+#[test]
+fn mutex_share_data(){
+    let counter = Arc::new(Mutex::new(0));
+    let mut handlers = vec![];
+    for i in 0..10{
+        // 创建多个线程
+        let counter = Arc::clone(&counter);
+        let handler = thread::spawn(move ||{
+            let mut num = counter.lock().unwrap();
+            *num +=i;
+        });
+
+        // 将handle join句柄加入到handlers
+        handlers.push(handler);
+    }
+
+    for handler in handlers{
+        handler.join().unwrap();
+    }
+
+    // result: 45
+    println!("result: {}",*counter.lock().unwrap());
+}
+```
+
+# 无畏并发
+    Rust 提供了用于消息传递的通道，和像 Mutex<T> 和 Arc<T> 
+    这样可以安全的用于并发上下文的智能指针。类型系统和借 用检查器会确保这些场景中的代码，
+    不会出现数据竞争和无效的引用。一旦代码可以编译了，我们就可以坚信这些代码
+    可以正确的运行于多线程环境，而不会出现其他语言中经常出现的那些难以追踪的 bug。
+    并发编程不再是什么可怕的概念：无所畏惧地并发吧！
