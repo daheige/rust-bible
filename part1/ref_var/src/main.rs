@@ -72,3 +72,17 @@ help: consider using the `'static` lifetime
 fn calculate_len(s: &String) -> usize {
     s.len()
 }
+
+#[cfg(test)]
+mod tests{
+    #[test]
+    fn box_test(){
+        // Box<T> 在堆上存储数据，数据大小可确定
+        let b = Box::new(5);
+        println!("b = {}",b);
+        let x = 5;
+        let y = Box::new(x); // 像引用一样使用box
+        assert_eq!(5,x);
+        assert_eq!(5,*y);
+    }
+}
