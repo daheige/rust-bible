@@ -1,0 +1,9 @@
+foo:
+  - "abc"
+  - "list2"
+bar:
+    - 1
+    - 2.0
+point:
+  x: 1
+  y: 2
