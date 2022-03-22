@@ -8,8 +8,13 @@ fn main() {
     // 这里的logger是对应rust crate包名
     // 设置最低日志级别为debug
     // 日志level 优先级  error > warn > info > debug > trace
-    // 手动设置环境变量
-    env::set_var("RUST_LOG", "logger=debug"); // 通过调用函数设置环境变量
+    //
+    // 可以在运行时候指定
+    // RUST_LOG=path::to_module=log_leve 多个用逗号隔开
+    // 比如 RUST_LOG=log_dem=info,abc=debug
+    //
+    // 如果是运行指定，下面的代码需要注释掉
+    env::set_var("RUST_LOG", "logger=debug"); // 手动设置环境变量 通过调用函数设置环境变量
     env_logger::init();
     // 初始化操作
     info!("{}","abc");
