@@ -11,3 +11,7 @@
     By default, env_logger logs to stderr. 
     If you want to log to stdout instead, you can use the Builder 
     to change the log target:
+
+# 其他日志库
+    simple_logger
+    log4rs
