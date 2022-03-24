@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::ptr::hash;
 use redis::{self, Commands};
 
 // redis cmd 基本操作
