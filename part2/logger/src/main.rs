@@ -33,9 +33,9 @@ mod tests {
     #[test]
     fn config_log_output() {
         env::set_var("RUST_LOG", "logger=debug");
-        let mut buidler = Builder::from_default_env();
-        buidler.target(Target::Stdout);
-        buidler.init();
+        let mut builder = Builder::from_default_env();
+        builder.target(Target::Stdout);
+        builder.init();
         info!("{}","abc");
         error!("1111");
         warn!("warn 222");
