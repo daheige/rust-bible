@@ -69,7 +69,7 @@ async fn main() -> Result<(), PulsarError> {
             Ok(data) => data,
             Err(err) => {
                 error!("could not deserialize message:{:?}",err);
-                break;
+                continue;
             }
         };
 

@@ -73,10 +73,12 @@ async fn main() -> Result<(), pulsar::Error> {
 
     let mut counter: usize = 0;
     loop {
+        let s = counter.to_string();
+
         // 发送消息
         producer
             .send(Message {
-                data: "hello".to_string(), // 发送的message内容是 {"data":"hello"}
+                data: "hello: ".to_string() + &s, // 发送的message内容是 {"data":"hello"}
             }).await?;
 
         counter += 1;
