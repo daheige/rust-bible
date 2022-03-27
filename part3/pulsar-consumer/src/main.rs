@@ -4,8 +4,8 @@ use serde_json;
 
 use futures::TryStreamExt;
 use pulsar::{
-    Authentication, Consumer, DeserializeMessage, Payload, Pulsar, SubType, TokioExecutor,
-    Error as PulsarError,
+    Authentication, Consumer, DeserializeMessage, Payload, Pulsar, TokioExecutor,
+    Error as PulsarError, message::proto::command_subscribe::SubType,
 };
 
 use std::env;
@@ -13,7 +13,7 @@ use env_logger;
 use log::{info, error};
 
 // 定义消息格式
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct Message {
     data: String,
 }
@@ -75,7 +75,7 @@ async fn main() -> Result<(), PulsarError> {
         };
 
         // 消费消息逻辑
-        println!("data:{}", data.data.as_str());
+        println!("got message data:{}", data.data.as_str());
 
         // 消息ack确认
         consumer.ack(&msg).await?;

@@ -12,7 +12,7 @@ use std::env;
 use env_logger;
 
 // 定义消息格式
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct Message {
     data: String,
 }
@@ -71,15 +71,21 @@ async fn main() -> Result<(), PulsarError> {
         .build()
         .await?;
 
+    // check producer connection
+    producer.check_connection().await.map(|_| {
+        println!("producer connection ok")
+    })?;
+
     let mut counter: usize = 0;
     loop {
         let s = counter.to_string();
 
+        let msg = Message {
+            data: "hello: ".to_string() + &s, // 发送的message内容是 {"data":"hello"}
+        };
+        println!("sent msg:{:?}", msg);
         // 发送消息
-        producer
-            .send(Message {
-                data: "hello: ".to_string() + &s, // 发送的message内容是 {"data":"hello"}
-            }).await?;
+        producer.send(msg).await?;
 
         counter += 1;
         println!("{} messages", counter);
