@@ -22,6 +22,7 @@ fn main() {
     thread::sleep(Duration::from_secs(1));
 }
 
+// 异步函数返回的是一个future 等待某个时候被执行
 async fn hello() {
     println!("hello async demo");
 }
@@ -61,7 +62,7 @@ async fn async_action_exec() {
     // future will take over the current thread. If `dance` becomes blocked,
     // `learn_and_sing` can take back over. If both futures are blocked, then
     // `async_main` is blocked and will yield to the executor.
-    //允许其他任务并发执行
+    // 允许其他任务并发执行
     // `join!` 类似于 `.await` ，但是可以等待多个 future 并发完成
     futures::join!(f1,f2);
 }

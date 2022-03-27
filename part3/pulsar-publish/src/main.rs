@@ -30,6 +30,7 @@ impl SerializeMessage for Message {
 
 #[tokio::main]
 async fn main() -> Result<(), pulsar::Error> {
+    // env::set_var("RUST_LOG", "pulsar-publish=debug");
     env_logger::init();
     let address = env::var("PULSAR_ADDRESS")
         .ok()
@@ -37,6 +38,7 @@ async fn main() -> Result<(), pulsar::Error> {
 
     // 对于topic需要提前kafka建立好
     // 可以参考kafka sh命令使用
+    // 也可以参考 go-god/broker/gpulsar 启动一个创建topic
     let topic = env::var("PULSAR_TOPIC")
         .ok()
         .unwrap_or_else(|| "my-topic".to_string());
@@ -51,8 +53,11 @@ async fn main() -> Result<(), pulsar::Error> {
         builder = builder.with_auth(authentication);
     }
 
+    // 通过build的方式创建pulsar object
+    let pulsar_obj: Pulsar<_> = builder.build().await?;
+
     // 创建producer
-    let mut producer = builder.build().await?
+    let mut producer = pulsar_obj
         .producer()
         .with_topic(topic)
         .with_name("my_producer")
@@ -66,7 +71,7 @@ async fn main() -> Result<(), pulsar::Error> {
         .build()
         .await?;
 
-    let mut counter = 0usize;
+    let mut counter: usize = 0;
     loop {
         // 发送消息
         producer
