@@ -102,6 +102,27 @@ mod tests {
         // convert to a string of json
         let s = j.to_string();
         println!("s = {}", s);
+
+        let s = json!({
+            "code":0,
+            "message":"ok",
+            "data":[],
+        });
+        println!("s json encode:{}",s.to_string());
+
+        let s = json!({
+            "code":0,
+            "message":"ok",
+            "data":{},
+        });
+        println!("s json encode:{}",s.to_string());
+
+        let s = json!({
+            "code":0,
+            "message":"ok",
+            "data":null,
+        });
+        println!("s json encode:{}",s.to_string());
     }
 }
 
