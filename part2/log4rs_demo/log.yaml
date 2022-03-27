@@ -1,21 +1,18 @@
-refresh_rate: 30 seconds
+refresh_rate: 3 seconds
 appenders:
   stdout:
     kind: console
   requests:
     kind: file
-    path: "log/requests.log"
+    path: "log/app.log"
+    append: true
     encoder:
       pattern: "{d} - {m}{n}"
 root:
-  level: warn
+  level: debug #最低级别
   appenders:
     - stdout
+    - requests
 loggers:
-  app::backend::db:
-    level: info
-  app::requests:
-    level: info
-    appenders:
-      - requests
-    additive: false
+  requests:
+    level: debug

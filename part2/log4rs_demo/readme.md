@@ -1,3 +1,6 @@
+# 日志级别
+    error > warn > info > debug > trace
+
 # 配置详解
 
 1、appenders 输出到什么地方
