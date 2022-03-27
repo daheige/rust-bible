@@ -29,7 +29,7 @@ impl SerializeMessage for Message {
 }
 
 #[tokio::main]
-async fn main() -> Result<(), pulsar::Error> {
+async fn main() -> Result<(), PulsarError> {
     // env::set_var("RUST_LOG", "pulsar-publish=debug");
     env_logger::init();
     let address = env::var("PULSAR_ADDRESS")

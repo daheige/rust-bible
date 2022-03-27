@@ -20,6 +20,7 @@ struct Message {
 
 // 实现反序列化
 impl DeserializeMessage for Message {
+    // 执行输出的返回结果
     type Output = Result<Message, serde_json::Error>;
     fn deserialize_message(payload: &Payload) -> Self::Output {
         serde_json::from_slice(&payload.data)
