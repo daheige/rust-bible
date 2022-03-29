@@ -22,6 +22,8 @@ https://github.com/sunface/rust-codes
 # rust资料汇总
 https://github.com/shirdonliao/awesome-rust
 
+https://www.zhihu.com/question/30511494/answer/2291402645
+
 # rust mysql操作
 https://github.com/launchbadge/sqlx
 
