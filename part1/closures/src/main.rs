@@ -78,4 +78,16 @@ fn main() {
     // 下面不能再执行，因为所有权已经移动到了闭包中了，使得v在主线程中变成了未初始化了，就不能再使用了
     // println!("v = {:?}", v); //  ^ value borrowed here after move
     handle.join().unwrap();
+
+    // 将闭包的执行结果返回给x,这里x是一个闭包函数
+    let x = |num|{
+        if num > 1{
+            1
+        }else{
+            2
+        }
+    };
+
+    let y = x(1);
+    println!("y = {}",y);
 }
