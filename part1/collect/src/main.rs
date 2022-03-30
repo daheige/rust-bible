@@ -134,3 +134,27 @@ fn main() {
        println!("key:{} value:{}",key,value);
    }
 }
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn vec_change(){
+        let mut v = vec![100,120,110];
+        for i in &mut v{
+            *i += 10
+        }
+
+        println!("v:{:?}",v);
+    }
+
+    #[test]
+    fn string_demo(){
+        /*
+        pub struct String {
+            vec: Vec<u8>,
+        }
+         */
+        let s = String::from("rust hello"); // 底层是一个String结构体，里面字段是vec:vec<u8>
+        println!("s:{}",s);
+    }
+}
