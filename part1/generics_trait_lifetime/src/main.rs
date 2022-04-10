@@ -137,11 +137,22 @@ pub fn notify<T: Summarizable>(item: T) {
     println!("news: {}", item.summary());
 }
 
-// 特征对象通过&dyn trait name 或&mut dyn trait来进行特征分发
+// 特征对象通过dyn trait name来进行特征分发
 // 可以创建多态api，这种方式被声明为实现了某个特征api,就是特征对象
 // 特征对象实现实际上一个胖指针，并且是不定长类型，需要在引用符号后面使用
+// 在运行时候，才知道具体的trait是什么类型实现的
 fn show_me(item: &dyn Summarizable) {
     println!("summary: {}", item.summary());
+}
+
+// 通过Box + dyn trait方式返回不同实现的trait
+// dyn trait本质上一个指向具体类型实现的指针
+fn new_summary(t: &str) -> Box<dyn Summarizable> {
+    if t == "art" {
+        Box::new(Art::new(t.to_string(), "heige".to_string(), "abc".to_string()))
+    } else {
+        Box::new(Weibo::new(t.to_string(), "heige".to_string(), 123))
+    }
 }
 
 // 在函数中定义泛型
@@ -307,6 +318,10 @@ fn main() {
     summary:author: daheige,title:post2,content:rust study
     summary:weibo-hi rust-100
      */
+
+    println!("=====dyn trait========");
+    let s = new_summary("art");
+    s.display();
 }
 
 // 下面这个函数是编译不通过，提示生命周期错误
