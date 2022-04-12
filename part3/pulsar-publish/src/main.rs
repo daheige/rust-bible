@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use serde_json;
 
 // 引入pulsar
@@ -8,8 +8,8 @@ use pulsar::{
 };
 
 // 日志组件设置
-use std::env;
 use env_logger;
+use std::env;
 
 // 定义消息格式
 #[derive(Debug, Serialize, Deserialize)]
@@ -19,8 +19,7 @@ struct Message {
 
 impl SerializeMessage for Message {
     fn serialize_message(input: Self) -> Result<producer::Message, PulsarError> {
-        let payload = serde_json::to_vec(&input)
-            .map_err(|e| PulsarError::Custom(e.to_string()))?;
+        let payload = serde_json::to_vec(&input).map_err(|e| PulsarError::Custom(e.to_string()))?;
         Ok(producer::Message {
             payload,
             ..Default::default() // 其他字段采用默认设置
@@ -72,9 +71,10 @@ async fn main() -> Result<(), PulsarError> {
         .await?;
 
     // check producer connection
-    producer.check_connection().await.map(|_| {
-        println!("producer connection ok")
-    })?;
+    producer
+        .check_connection()
+        .await
+        .map(|_| println!("producer connection ok"))?;
 
     let mut counter: usize = 0;
     loop {

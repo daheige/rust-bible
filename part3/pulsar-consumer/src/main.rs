@@ -1,16 +1,16 @@
 // 用于序列化和反序列化
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use serde_json;
 
 use futures::TryStreamExt;
 use pulsar::{
-    Authentication, Consumer, DeserializeMessage, Payload, Pulsar, TokioExecutor,
-    Error as PulsarError, message::proto::command_subscribe::SubType,
+    message::proto::command_subscribe::SubType, Authentication, Consumer, DeserializeMessage,
+    Error as PulsarError, Payload, Pulsar, TokioExecutor,
 };
 
-use std::env;
 use env_logger;
-use log::{info, error};
+use log::{error, info};
+use std::env;
 
 // 定义消息格式
 #[derive(Debug, Serialize, Deserialize)]
@@ -32,12 +32,12 @@ async fn main() -> Result<(), PulsarError> {
     println!("Hello, world!");
     env_logger::init();
 
-    let address = env::var("PULSAR_ADDRESS").ok().unwrap_or_else(|| {
-        "pulsar://127.0.0.1:6650".to_string()
-    });
-    let topic = env::var("PULSAR_TOPIC").ok().unwrap_or_else(|| {
-        "my-topic".to_string()
-    });
+    let address = env::var("PULSAR_ADDRESS")
+        .ok()
+        .unwrap_or_else(|| "pulsar://127.0.0.1:6650".to_string());
+    let topic = env::var("PULSAR_TOPIC")
+        .ok()
+        .unwrap_or_else(|| "my-topic".to_string());
 
     let mut builder = Pulsar::builder(address, TokioExecutor);
     if let Ok(token) = env::var("PULSAR_TOKEN") {
@@ -53,7 +53,8 @@ async fn main() -> Result<(), PulsarError> {
     let pulsar_obj: Pulsar<_> = builder.build().await?;
 
     // create consumer
-    let mut consumer: Consumer<Message, _> = pulsar_obj.consumer()
+    let mut consumer: Consumer<Message, _> = pulsar_obj
+        .consumer()
         .with_topic(topic)
         .with_consumer_name("group-2") // 设置消费组名字
         .with_subscription_type(SubType::Exclusive)
@@ -64,12 +65,12 @@ async fn main() -> Result<(), PulsarError> {
     println!("consumer has run...");
     let mut counter: usize = 0;
     while let Some(msg) = consumer.try_next().await? {
-        info!("metadata:{:?}",msg.message_id());
-        info!("id:{:?}",msg.message_id());
+        info!("metadata:{:?}", msg.message_id());
+        info!("id:{:?}", msg.message_id());
         let data = match msg.deserialize() {
             Ok(data) => data,
             Err(err) => {
-                error!("could not deserialize message:{:?}",err);
+                error!("could not deserialize message:{:?}", err);
                 continue;
             }
         };
@@ -80,7 +81,7 @@ async fn main() -> Result<(), PulsarError> {
         // 消息ack确认
         consumer.ack(&msg).await?;
         counter += 1;
-        info!("got {} messages",counter);
+        info!("got {} messages", counter);
     }
 
     Ok(())

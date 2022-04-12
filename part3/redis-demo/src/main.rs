@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use redis::{self, Commands};
+use std::collections::HashMap;
 
 // redis cmd 基本操作
 fn main() {
@@ -27,7 +27,10 @@ fn main() {
     let _: redis::RedisResult<()> = redis_obj.conn.hset("my_hash", "b", "efg");
 
     // hash get
-    let a: String = redis_obj.conn.hget("my_hash", "a").unwrap_or("".to_string());
+    let a: String = redis_obj
+        .conn
+        .hget("my_hash", "a")
+        .unwrap_or("".to_string());
     println!("a: {}", a);
 
     // hash hgetall 哈希获得所有数据 map
@@ -39,8 +42,13 @@ fn main() {
     println!("len = {}", len);
 
     // set myname dahege ex 100 nx
-    let _: redis::RedisResult<()> = redis::cmd("set").arg("my_name").arg("daheige").
-        arg("ex").arg(100).arg("nx").query(&mut redis_obj.conn);
+    let _: redis::RedisResult<()> = redis::cmd("set")
+        .arg("my_name")
+        .arg("daheige")
+        .arg("ex")
+        .arg(100)
+        .arg("nx")
+        .query(&mut redis_obj.conn);
 
     // 一次设置多个值
     let _: redis::RedisResult<()> = redis_obj.conn.set_multiple(&[("num1", 1), ("num2", 2)]);
@@ -51,7 +59,9 @@ fn main() {
 
     // hincy my_hash_number art:1:read_count 1 哈希计数器
     // hget my_hash_number art:1:read_count
-    let _: redis::RedisResult<()> = redis_obj.conn.hincr("my_hash_number", "art:1:read_count", 1);
+    let _: redis::RedisResult<()> = redis_obj
+        .conn
+        .hincr("my_hash_number", "art:1:read_count", 1);
 
     // 设置集合元素
     let _: redis::RedisResult<()> = redis_obj.conn.sadd("my_set", 1);
