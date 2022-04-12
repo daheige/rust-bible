@@ -72,7 +72,14 @@ async fn main() -> Result<(), sqlx::Error> {
         println!("s = {:?}", s);
     }
 
-    // 3、使用execute，执行更新操作，返回affect_rows todo
+    // 3、使用execute，执行更新操作，返回affect_rows
+    let sql = r#"update student set name = ? where id = ?"#;
+    let mut affect_rows = sqlx::query(sql)
+        .bind("heige")
+        .bind(1)
+        .execute(&pool)
+        .await?;
+    println!("{:?}", affect_rows);
 
     Ok(())
 }
