@@ -1,5 +1,3 @@
-# sea-orm
-https://www.sea-ql.org/SeaORM/docs/index
-
-https://github.com/SeaQL/sea-orm
-
+# mysql
+    https://github.com/blackbeam/rust-mysql-simple
+    https://crates.io/crates/mysql
