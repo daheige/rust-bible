@@ -4,6 +4,8 @@
     pulsar-publish pulsar 发送者使用
     pulsar-consumer pulsar 消费者使用
     pulsar-batch pulsar spawn publish sub
+    mysql-demo mysql库使用
+    sqlx-demo sqlx库使用
 
 # pulsar in docker
 
