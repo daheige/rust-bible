@@ -1,16 +1,23 @@
+use async_trait::async_trait;
 use axum::{
+    extract::{Form, FromRequest, RequestParts},
     handler::Handler,
     http::Method,
     http::StatusCode,
     http::Uri,
-    response::{Html, IntoResponse},
+    response::{Html, IntoResponse, Response},
     routing::{get, post},
-    Json, Router,
+    BoxError, Json, Router,
 };
-
+use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
+use std::fmt;
+use std::fmt::Formatter;
 use std::net::SocketAddr;
 use tokio::signal;
+// 验证的validator
+use thiserror::Error;
+use validator::Validate;
 
 #[tokio::main]
 async fn main() {
@@ -18,7 +25,11 @@ async fn main() {
     let app = Router::new()
         .route("/", get(root))
         .route("/user", post(create_user))
-        .route("/html", get(html_data));
+        .route("/html", get(html_data))
+        .route("/form", get(show_form).post(post_form))
+        .route("/form2", get(form2));
+    // .route("/form", get(show_form))
+    // .route("/form", post(post_form));
 
     let app = app.fallback(handler_no_router.into_service());
 
@@ -104,4 +115,107 @@ async fn shutdown() {
     }
 
     println!("signal received,starting graceful shutdown")
+}
+
+// form
+async fn show_form() -> Html<&'static str> {
+    Html::from(
+        r#"
+        <!doctype html>
+        <html>
+            <head></head>
+            <body>
+                <form action="/form" method="post">
+                    <label for="name">
+                        Enter your name:
+                        <input type="text" name="name">
+                    </label>
+                    <label>
+                        Enter your email:
+                        <input type="text" name="email">
+                    </label>
+                    <input type="submit" value="Subscribe">
+                </form>
+            </body>
+        </html>
+        "#,
+    )
+}
+
+#[derive(Deserialize, Debug, Validate)]
+#[allow(dead_code)]
+struct Input {
+    #[validate(length(min = 1, message = "name can not be empty"))]
+    name: String,
+    #[validate(length(min = 1, message = "email can not be empty"))]
+    email: String,
+}
+
+async fn post_form(Form(input): Form<Input>) -> impl IntoResponse {
+    println!("{:?}", input);
+    println!("email:{}", input.email);
+    (
+        StatusCode::OK,
+        format!("name:{},emil:{}", input.name, input.email),
+    )
+}
+
+//==========validator========
+#[derive(Debug, Clone, Copy, Default)]
+pub struct ValidatedForm<T>(pub T);
+
+// 当请求http://localhost:3000/form2?name=111&email=
+// 会提示：Input validation error: [email: email can not be empty]
+async fn form2(ValidatedForm(input): ValidatedForm<Input>) -> Html<String> {
+    println!("{:?}", input);
+    println!("email:{}", input.email);
+    Html(format!("name:{},emil:{}", input.name, input.email))
+}
+
+// FromRequest 需要实现 from_request 方法
+#[async_trait]
+impl<T, B> FromRequest<B> for ValidatedForm<T>
+where
+    T: DeserializeOwned + Validate,
+    B: http_body::Body + Send,
+    B::Data: Send,
+    B::Error: Into<BoxError>,
+{
+    type Rejection = ServerError;
+    async fn from_request(req: &mut RequestParts<B>) -> Result<Self, Self::Rejection> {
+        let Form(value) = Form::<T>::from_request(req).await?; // 从请求中结构value
+        value.validate()?;
+        Ok(ValidatedForm(value))
+    }
+}
+
+#[derive(Debug, Error)]
+pub enum ServerError {
+    #[error(transparent)]
+    ValidationError(#[from] validator::ValidationErrors),
+
+    #[error(transparent)]
+    AxumFormRejection(#[from] axum::extract::rejection::FormRejection),
+}
+
+// 这里不需要实现 Display 因为 thiserror::Error trait实现了
+// impl fmt::Display for ServerError {
+//     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+//         write!(f, "{}", self)
+//     }
+// }
+
+// 为ServerError实现IntoResponse
+impl IntoResponse for ServerError {
+    fn into_response(self) -> Response {
+        match self {
+            ServerError::ValidationError(_) => {
+                // 这里最好是给 ServerError::ValidationError 实现Display trait
+                let message = format!("input validation error: [{}]", self).replace('\n', ", ");
+                (StatusCode::BAD_REQUEST, message)
+            }
+            ServerError::AxumFormRejection(_) => (StatusCode::BAD_REQUEST, self.to_string()),
+        }
+        .into_response()
+    }
 }
