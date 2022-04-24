@@ -8,7 +8,6 @@ struct Animal {
     name: String,
     legs: i64,
 }
-use async_std::task;
 
 #[async_std::main]
 async fn main() -> tide::Result<()> {
