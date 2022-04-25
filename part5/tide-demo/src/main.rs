@@ -1,7 +1,10 @@
+use http_types::Mime;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
+use std::str::FromStr;
 use tide::prelude::*;
-use tide::{Body, Request, Response};
+use tide::{log, Redirect};
+use tide::{Body, Request, Response, StatusCode};
 
 #[derive(Debug, Deserialize, Serialize)]
 struct Animal {
@@ -11,6 +14,8 @@ struct Animal {
 
 #[async_std::main]
 async fn main() -> tide::Result<()> {
+    log::start();
+
     let address = "127.0.0.1:8000";
     println!("server has on: {}", address);
     let mut app = tide::new();
@@ -29,6 +34,9 @@ async fn main() -> tide::Result<()> {
         }))
     });
 
+    app.at("/query").get(get_req);
+    app.at("/query2").get(get_req2);
+
     app.at("/foo").post(|mut req: Request<()>| async move {
         // 接收body 字符串 这里用move 关键字将req移动到闭包中获取req所有权
         let body: String = req.body_string().await.unwrap();
@@ -44,6 +52,9 @@ async fn main() -> tide::Result<()> {
     //     Ok(res)
     // });
     app.at("/api/:name").get(get_name);
+    // 静态目录设置 http://localhost:8000/static/test.html
+    app.at("/static").serve_dir("static/")?;
+    app.at("/page").get(redirect);
 
     app.listen(address).await?;
     Ok(())
@@ -88,4 +99,50 @@ async fn get_name(mut req: Request<()>) -> tide::Result {
     let mut res = Response::new(200);
     res.set_body(Body::from_string(name));
     Ok(res)
+}
+
+// 从query中获取参数
+// localhost:8000/query?name=daheige&legs=1
+async fn get_req(mut req: Request<()>) -> tide::Result {
+    // let q = req.query();
+    // if q.is_ok() {
+    //     let query: Animal = q.unwrap();
+    //     println!("name:{}", query.name);
+    //     println!("legs:{}", query.legs);
+    //
+    //     let mut res = Response::new(200); // 创建一个response
+    //     res.set_body(Body::from_json(&query)?);
+    //     Ok(res)
+    // } else {
+    //     Ok("param invalid".into())
+    // }
+    let query: Animal = req.query().unwrap();
+    println!("name:{}", query.name);
+    println!("legs:{}", query.legs);
+
+    // let mut res = Response::new(200); // 创建一个response
+    let mut res = Response::new(StatusCode::Ok); // 创建一个response
+    res.set_body(Body::from_json(&query)?);
+    Ok(res)
+}
+
+// 返回内容type设置
+// localhost:8000/query2?name=daheige&legs=1
+async fn get_req2(mut req: Request<()>) -> tide::Result {
+    let query: Animal = req.query().unwrap();
+    println!("name:{}", query.name);
+    println!("legs:{}", query.legs);
+
+    log::info!("legs:{}", query.legs);
+
+    let mime = Mime::from_str("application/json; charset=utf-8").unwrap();
+    // let mut res = Response::new(200); // 创建一个response
+    let mut res = Response::new(StatusCode::Ok); // 创建一个response
+    res.set_content_type(mime);
+    res.set_body(Body::from_json(&query)?);
+    Ok(res)
+}
+
+async fn redirect(mut req: Request<()>) -> tide::Result {
+    Ok(Redirect::new("/animals").into())
 }
