@@ -93,7 +93,7 @@ async fn foo(mut req: Request<()>) -> tide::Result {
 }
 
 // 从path获取参数
-async fn get_name(mut req: Request<()>) -> tide::Result {
+async fn get_name(req: Request<()>) -> tide::Result {
     let name = req.param("name").unwrap().to_string();
     println!("name:{}", name);
     let mut res = Response::new(200);
@@ -103,7 +103,7 @@ async fn get_name(mut req: Request<()>) -> tide::Result {
 
 // 从query中获取参数
 // localhost:8000/query?name=daheige&legs=1
-async fn get_req(mut req: Request<()>) -> tide::Result {
+async fn get_req(req: Request<()>) -> tide::Result {
     // let q = req.query();
     // if q.is_ok() {
     //     let query: Animal = q.unwrap();
@@ -128,7 +128,13 @@ async fn get_req(mut req: Request<()>) -> tide::Result {
 
 // 返回内容type设置
 // localhost:8000/query2?name=daheige&legs=1
-async fn get_req2(mut req: Request<()>) -> tide::Result {
+async fn get_req2(req: Request<()>) -> tide::Result {
+    // 当用户参数没有传递正确，它会抛出panic，仅仅是当前的线程中
+    // 只在当前请求中执行失败，不会影响别的请求
+    // thread 'async-std/runtime' panicked at 'called `Result::unwrap()` 
+    // on an `Err` value: failed with reason: missing field `legs`',
+    //  src/main.rs:132:37
+    // let query: Animal = req.query().expect("request param invalid");
     let query: Animal = req.query().unwrap();
     println!("name:{}", query.name);
     println!("legs:{}", query.legs);
@@ -143,6 +149,6 @@ async fn get_req2(mut req: Request<()>) -> tide::Result {
     Ok(res)
 }
 
-async fn redirect(mut req: Request<()>) -> tide::Result {
+async fn redirect(_req: Request<()>) -> tide::Result {
     Ok(Redirect::new("/animals").into())
 }
