@@ -1,4 +1,4 @@
-use http_types::Mime;
+use http_types::{Cookie, Mime};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::str::FromStr;
@@ -19,6 +19,10 @@ async fn main() -> tide::Result<()> {
     let address = "127.0.0.1:8000";
     println!("server has on: {}", address);
     let mut app = tide::new();
+
+    // 设置请求的中间件处理
+    app.with(log::LogMiddleware::new());
+
     app.at("/orders/shoes").post(order_shoes);
     app.at("/").get(home);
     app.at("/index").get(|_| async { Ok("hello rust") });
@@ -55,6 +59,11 @@ async fn main() -> tide::Result<()> {
     // 静态目录设置 http://localhost:8000/static/test.html
     app.at("/static").serve_dir("static/")?;
     app.at("/page").get(redirect);
+
+    // cookie操作
+    app.at("/set-cookie").get(set_cookie);
+    app.at("/get-cookie").get(get_cookie);
+    app.at("/remove-cookie").get(remove_cookie);
 
     app.listen(address).await?;
     Ok(())
@@ -131,7 +140,7 @@ async fn get_req(req: Request<()>) -> tide::Result {
 async fn get_req2(req: Request<()>) -> tide::Result {
     // 当用户参数没有传递正确，它会抛出panic，仅仅是当前的线程中
     // 只在当前请求中执行失败，不会影响别的请求
-    // thread 'async-std/runtime' panicked at 'called `Result::unwrap()` 
+    // thread 'async-std/runtime' panicked at 'called `Result::unwrap()`
     // on an `Err` value: failed with reason: missing field `legs`',
     //  src/main.rs:132:37
     // let query: Animal = req.query().expect("request param invalid");
@@ -151,4 +160,23 @@ async fn get_req2(req: Request<()>) -> tide::Result {
 
 async fn redirect(_req: Request<()>) -> tide::Result {
     Ok(Redirect::new("/animals").into())
+}
+
+/// Tide will use the the `Cookies`'s `Extract` implementation to build this parameter.
+async fn set_cookie(_req: Request<()>) -> tide::Result {
+    let mut res = Response::new(StatusCode::Ok);
+    res.insert_cookie(Cookie::new("user", "daheige"));
+    res.set_body("success");
+    Ok(res)
+}
+
+async fn get_cookie(req: Request<()>) -> tide::Result {
+    let user = req.cookie("user").unwrap();
+    Ok(format!("get cookie: {}", user).into())
+}
+
+async fn remove_cookie(req: Request<()>) -> tide::Result {
+    let mut res = Response::new(StatusCode::Ok);
+    res.remove_cookie(Cookie::named("user"));
+    Ok(res)
 }
