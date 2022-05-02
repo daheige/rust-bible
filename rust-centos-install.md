@@ -10,9 +10,10 @@
 		source ~/.bashrc
 
 	2. 下载rustup-init
-		wget  'https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup/archive/1.21.1/x86_64-unknown-linux-gnu/rustup-init' -O 'rustup-init'
+		wget  'https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup/archive/1.24.3/x86_64-unknown-linux-gnu/rustup-init' -O 'rustup-init'
 		chmod a+x rustup-init
 		./rustup-init -v -y --no-modify-path
+		
 	3.修改~/.bashrc的配置文件
 		# rust
 		export RUSTUP_DIST_SERVER="https://mirrors.tuna.tsinghua.edu.cn/rustup"
