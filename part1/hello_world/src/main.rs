@@ -16,3 +16,16 @@ fn greet_world() {
 
     println!("hello");
 }
+
+fn add(a : i64,b : i64) -> i64{
+    a+b
+}
+
+#[test]
+fn test_add(){
+    assert_eq!(12,add(1,11));
+    assert_eq!(10,add(1,9));
+    println!("add(1,2) = {}",add(1,2));
+
+}
+
