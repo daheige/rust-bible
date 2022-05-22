@@ -3,6 +3,7 @@ fn main() {
     let mut s = String::from("hello");
     println!("s = {s}");
     s.push_str(",world");
+    s.push_str(",daheige");
 
     println!("s = {s}");
 
