@@ -2,7 +2,7 @@
 
 	1. 设置好清华镜像
 		vim ~/.bashrc
-		export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup
+		export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
 
 		:wq
 		source ~/.bashrc
@@ -15,7 +15,10 @@
         或者使用下面sh安装
         mkdir myrust
         cd myrust
+        export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
+        export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
         如果上面卡住了，可以直接把shell文件下载下来
         curl https://sh.rustup.rs >> rustup-init.sh
         sh rustup-init.sh
@@ -23,8 +26,8 @@
 
 	3.修改~/.bashrc的配置文件
 		# rust
-		export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup
-        export RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup
+        export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
+        export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
 		export PATH="$HOME/.cargo/bin:$PATH"
 
 		:wq
