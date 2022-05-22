@@ -68,4 +68,4 @@ https://www.rust-lang.org/zh-CN/tools/install
     [source.aliyun]
     registry = "https://code.aliyun.com/rustcc/crates.io-index"
     [net]
-    git-fetch-with-cli
+    git-fetch-with-cli=true
