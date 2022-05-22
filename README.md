@@ -2,6 +2,9 @@
     基于rust edition = "2021" 
     需要安装rust v1.58.0 以上版本
 
+# rust install
+https://www.rust-lang.org/zh-CN/tools/install
+
 # rust从入门到实战--7大块
     part1 rust基础,thread编程初体验
     part2 serde json序列化处理，yaml文件读取，log日志库基础操作
@@ -30,10 +33,11 @@ https://kaisery.github.io/trpl-zh-cn/ch01-01-installation.html
     升级到指定版本 rust update "1.58.0"
 
 # 设置rust国内镜像
+    https://mirrors.tuna.tsinghua.edu.cn/help/rustup/
 
 	国内提高访问速度，建议设置环境变量 
 	export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup
-	export RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup
+    export RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup
     export PATH="$HOME/.cargo/bin:$PATH"
 
 	在用户目录.cargo文件夹或在与Cargo.toml同级目录.cargo文件夹下创建config文件
