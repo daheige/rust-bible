@@ -79,16 +79,16 @@ fn main() {
     handle.join().unwrap();
 
     // 将闭包的执行结果返回给x,这里x是一个闭包函数
-    let x = |num|{
-        if num > 1{
+    let x = |num| {
+        if num > 1 {
             1
-        }else{
+        } else {
             2
         }
     };
 
     let y = x(1);
-    println!("y = {}",y);
+    println!("y = {}", y);
 }
 
 // 函数调用后闭包获得了被释放的内存环境
@@ -147,16 +147,16 @@ fn generate_workout2(intensity: u32, random_number: u32) {
 // 定义泛型结构体Cacher calculation 类型是一个函数闭包
 // value 是一个option 存放函数T闭包执行的结果
 struct Cacher<T>
-    where
-        T: Fn(u32) -> u32,
+where
+    T: Fn(u32) -> u32,
 {
     calculation: T,
     value: Option<u32>,
 }
 
 impl<T> Cacher<T>
-    where
-        T: Fn(u32) -> u32,
+where
+    T: Fn(u32) -> u32,
 {
     // 创建一个实例对象
     fn new(calculation: T) -> Cacher<T> {
@@ -182,9 +182,9 @@ impl<T> Cacher<T>
 }
 
 #[cfg(test)]
-mod tests{
+mod tests {
     #[test]
-    fn closure_demo(){
+    fn closure_demo() {
         //=============闭包深入研究=============
         // 闭包定义 参数放在管道||里面 {}是一个表达式
         // 闭包的 || {} 语法
