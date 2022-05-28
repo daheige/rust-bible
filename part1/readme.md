@@ -15,6 +15,7 @@
     generics_trait_lifetime 泛型、trait、生命周期 深入剖析和使用
     uint_test 单元测试和集成测试
     closures 闭包使用
+    my-mod/my-mod2 rust mod模块使用方式
     command-line-demo rust cmd参数读取
     iterators 标准库Iterator trait迭代器使用
     fearless_concurrent 无畏并发
