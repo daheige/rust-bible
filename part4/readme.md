@@ -200,8 +200,8 @@ there's a reasonable part that addresses the panic.
 If not, the program aborts.
 In practice, that means that block_on propagates panics to the blocking component
 
-task任务在正常情况下，报告错误；如果不能正常上报，应该是Result<T,E> 模式
-在出现panic的情况下，行为的不同取决于panic是否能合理解决出现的问题，如果不能整个程序就会终止；
+task任务在正常情况下，上报错误；如果不能正常上报，应该是Result<T,E> 模式。 
+在出现panic的情况下，行为的不同取决于panic是否能合理解决出现的问题，如果不能，整个程序就会终止； 
 在实践过程中，应该将panic传递给阻塞组件处理：
 ```rust
 use async_std::task;
@@ -233,5 +233,4 @@ task::block_on(async {
 https://github.com/async-rs/async-std/tree/master/examples/a-chat
 
 # async异步参考
-https://learnku.com/docs/async-book/2018
-https://book.async.rs/
+https://learnku.com/docs/async-book/2018 https://book.async.rs/
