@@ -2,6 +2,12 @@ use std::rc::Rc;
 use std::sync::Mutex;
 use std::thread::yield_now;
 use tokio::{spawn, sync::mpsc, sync::oneshot, task};
+// 实现自定义的Future需要的mod
+use std::future::Future;
+use std::pin::Pin;
+use std::task::{Context, Poll};
+use std::time::{Duration, Instant};
+
 async fn say_to_world() -> String {
     println!("exec say_to_world");
     String::from("hello,rust")
@@ -10,15 +16,20 @@ async fn say_to_world() -> String {
 struct Increment {
     mutex: Mutex<i64>,
 }
+
 impl Increment {
     fn incr(&self) {
         let mut value = self.mutex.lock().unwrap();
         *value += 1;
     }
 }
+
 async fn incr_task(i: &Increment) {
     i.incr();
 }
+
+// #[tokio::main] 将最外层 Future 提交给 Tokio 的执行器。该执行器负责调用 poll 函数，
+// 然后推动 Future 的执行，最终直至完成
 
 #[tokio::main]
 async fn main() {
@@ -124,4 +135,36 @@ async fn main() {
         let msg = rx.await;
         println!("get msg:{}", msg.unwrap());
     });
+
+    // 调用自定义的Delay
+    let when = Instant::now() + Duration::from_millis(10);
+    let future = Delay { when };
+    let out = future.await; // 执行
+
+    // .await 只能用于 async fn 函数中，因此我们将 main 函数声明成 async fn main
+    // 同时使用 #[tokio::main] 进行了标注
+    println!("out:{}", out);
+    assert_eq!(out, "done");
+}
+
+// 自定义一个Future实现
+// 1. 等待某个特定时间点的到来
+// 2. 在标准输出打印文本
+// 3. 生成一个字符串
+struct Delay {
+    when: Instant,
+}
+
+impl Future for Delay {
+    type Output = &'static str;
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        if Instant::now() >= self.when {
+            // 时间到了
+            println!("hello,world");
+            Poll::Ready("done")
+        } else {
+            cx.waker().wake_by_ref();
+            Poll::Pending
+        }
+    }
 }
