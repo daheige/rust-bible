@@ -124,7 +124,7 @@ async fn main() {
         println!("rx msg:{}", msg);
     }
 
-    // 使用 oneshot 消息通道
+    // 使用 oneshot 实现消息无通道发送和接收
     let t1 = tokio::spawn(async move {
         let (tx, rx) = oneshot::channel(); // 无缓冲通道
 
