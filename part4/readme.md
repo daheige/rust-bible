@@ -70,7 +70,7 @@ trait Future {
     而是 Future 就代表了计算本身，因此 Future 的所有者有责任去推进该计算过程的执行，
     例如通过 Future::poll 函数
 
-    - 在 Rust 中，ascyn 是惰性的，直到执行器 poll 它们时，才会开始执行
+    - 在 Rust 中，async 是惰性的，直到执行器 poll 它们时，才会开始执行
     - Waker 是 Future 被执行的关键，它可以链接起 Future 任务和执行器
     - 当资源没有准备时，会返回一个 Poll::Pending
     - 当资源准备好时，会通过 waker.wake 发出通知
