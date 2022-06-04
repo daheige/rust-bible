@@ -30,7 +30,7 @@
     虽然在同步的方法中调用阻塞函数会阻塞整个线程，但阻塞的 Futures 将让出线程所有权,
     允许其他的 Futures 运行。
 
-# Future 原理
+# rust Future原理--简单抽象理解
 ```rust
 trait SimpleFuture {
         type Output;
@@ -49,7 +49,7 @@ enum Poll<T> {
 }
 ```
 
-# rust Futures trait 初步认识
+# rust 底层Futures trait 抽象初步认识
 ```rust
 use std::{pin::Pin, task::{Context, Poll}};
 trait Future {
