@@ -49,7 +49,7 @@ enum Poll<T> {
 }
 ```
 
-# rust 底层Futures trait 抽象初步认识
+# rust 底层真正的Futures trait 抽象初步认识
 ```rust
 use std::{pin::Pin, task::{Context, Poll}};
 trait Future {
@@ -59,32 +59,34 @@ trait Future {
 ```
 仔细阅读，观察到的有以下内容：
 
-    通用的 Output.
-    提供 poll 函数，函数功能是允许我们查看当前计算的状态
-    （暂时忽略 Pin 和 Context，先不对它们作深入理解）
+  + 通用的 Output，就是执行完毕后返回值
+  + 提供 poll 函数，函数功能是允许我们查看当前计算的状态
+  （暂时忽略 Pin 和 Context，先不对它们作深入理解）
 
-    关联类型 Output 是 Future 执行完成后返回的值的类型
-    Pin 类型是在异步函数中进行借用的关键
-
-    和其它语言不同，Rust中的 Future 不代表一个发生在后台的计算，
+  + 关联类型 Output 是 Future 执行完成后返回的值的类型
+  + Pin 类型是在异步函数中进行借用的关键，它允许我们创建不可移动的future
+  + 不可移动的对象可以在他们的字段间存储指针
+  + 需要启动async/await,pin 就是必须的
+  + 跟上面的 simpleFuture比较，wake: fn() 变成了 &mut Context
+  + Context 类型提供了访问Waker类型的值的方式，这些值可以被用来wake up特定的任务（比如说web 连接处理）
+  + 和其它语言不同，Rust中的 Future 不代表一个发生在后台的计算，
     而是 Future 就代表了计算本身，因此 Future 的所有者有责任去推进该计算过程的执行，
-    例如通过 Future::poll 函数
+例如通过 Future::poll 函数：
+      - 在 Rust 中，async 是惰性的，直到执行器 poll 它们时，才会开始执行
+      - Waker 是 Future 被执行的关键，它可以链接起 Future 任务和执行器
+      - 当资源没有准备时，会返回一个 Poll::Pending
+      - 当资源准备好时，会通过 waker.wake 发出通知
+      - 执行器会收到通知，然后调度该任务继续执行，此时由于资源已经准备好，
+        因此任务可以顺利往前推进了
+      
+   每次调用 poll() 都会导致以下两种情况的其中一种：
+   + 计算已经完成， poll 会返回 Poll::Ready
+   + 计算尚未完成执行，poll 会返回 Poll::Pending
 
-    - 在 Rust 中，async 是惰性的，直到执行器 poll 它们时，才会开始执行
-    - Waker 是 Future 被执行的关键，它可以链接起 Future 任务和执行器
-    - 当资源没有准备时，会返回一个 Poll::Pending
-    - 当资源准备好时，会通过 waker.wake 发出通知
-    - 执行器会收到通知，然后调度该任务继续执行，此时由于资源已经准备好，
-      因此任务可以顺利往前推进了
-
-每次调用 poll() 都会导致以下两种情况的其中一种：
-
-    1.计算已经完成， poll 会返回 Poll::Ready
-    2.计算尚未完成执行，poll 会返回 Poll::Pending
-上述机制使我们可以从外部检查 Future 是否仍有未完成的工作，或最终是否完成并给出返回值。
-最简单 (但不是最有效) 的方法是不断循环执行 poll 函数。
-这种办法当然是有优化的可能，而这正是一个好的运行时要做的。
-请注意，在第 1 种情况发生后再次调用 poll 可能会导致混乱。
+    上述机制使我们可以从外部检查 Future 是否仍有未完成的工作，或最终是否完成并给出返回值。
+    最简单 (但不是最有效) 的方法是不断循环执行 poll 函数。
+    这种办法当然是有优化的可能，而这正是一个好的运行时要做的。
+    请注意，在第 1 种情况发生后再次调用 poll 可能会导致混乱。
 
 # async-std
     async-std 及其支持库，可以使您的异步编程更为轻松。它主要用于编写上层库和相关的应用程序。
