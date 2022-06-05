@@ -1,6 +1,8 @@
 # 什么是Pin
   - Pin 和Unpin 标记一起工作
   - Pin 会保证实现了!Unpin的对象永远不会被移动
+  - Pin 类型会包裹指针类型，保证指针指向的值不会被移动
+        比如： Pin<&mut T>,Pin<&T>,Pin<Box<T>>,即使T:!Unpin，也能保证T不会被移动
 
 # 为什么要Pin?
 ```rust
