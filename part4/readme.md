@@ -38,6 +38,30 @@
 + 如果Future Ready ，其最终值就是 await 表达式的值，这时执行就可以继续了
     否则就返回 Pending 给调用者
 
+# async的生命周期
++ 与传统的函数不同：async fn，如果它的参数是引用或是其它的非'static的，那么它返回的Future
+  就会绑定到参数的生命周期上
++ 这就意味着 async fn 返回的future,在.await的同时，fn 的非'static 的参数必须保持有效
+
+# async move
+  - async 块和闭包都支持move
+  - async move 块会获得其引用变量的所有权
+    + 允许其比当前所在的作用域活得长
+    + 但同时也放弃了与其它代码共享这些变量的能力
+
+# 在多线程执行者上运行.await
++ 当使用多线程 future 执行者时候，future 就可以线程间移动
+    - 所以async 体里面用的变量必须能够在线程间移动
+    - 因为任何的.await 都可能导致切换到一个新的线程
+
++ 这意味着使用以下类型是不安全的：
+    - Rc，&RefCell 和任何其它没有实现 Send trait 的类型，包含没实现 Sync trait 的引用
+    - 注意： 调用 .await 时候，只要这些类型不在作用域内，就可以使用他们，不安全
+
++ 在跨越一个 .await 期间，持有传统的、对future无感知的锁，也不是好主意
+    - 可导致线程池锁定
+    - 为此，可使用futures::lock 里面的Mutex 而不是 std::sync里面的Mutex
+
 # rust Future原理--简单抽象理解
 ```rust
 trait SimpleFuture {
