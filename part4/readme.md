@@ -87,6 +87,8 @@ trait Future {
     最简单 (但不是最有效) 的方法是不断循环执行 poll 函数。
     这种办法当然是有优化的可能，而这正是一个好的运行时要做的。
     请注意，在第 1 种情况发生后再次调用 poll 可能会导致混乱。
+    
+    自定义future trait实现，参考 time-future
 
 # async-std
     async-std 及其支持库，可以使您的异步编程更为轻松。它主要用于编写上层库和相关的应用程序。
@@ -107,7 +109,7 @@ trait Future {
     与 futures 相同，async-std 也重新导出了核心 std::future::Future 类型。
     您可以通过将 futures 加入您的 Cargo.toml 中并导入 FuturesExt 来使用它的扩展。
 
-# async-std 异步概念
+# async-std 运行时--异步概念
     Futures 是对代码运行方式的抽象。Futures 本身并没有什么作用，
     虽然这对于按步执行的命令式语言来说这是一个奇怪的概念。
     Futures 的运行由你决定。Futures 仅在对它们调用 executing 时才会执行。
