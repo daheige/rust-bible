@@ -7,6 +7,9 @@
     任务task,wake反应器、组合器以及低级 I/O future 和 trait
     社区提供的async 运行时生态主要是async-std,tokio
 
+    tokio: 一个流行的async 生态系统，包含HTTP,gRPC和trace跟踪框架等等
+    async-std: 提供标准库的async 运行时副本
+
 # async runtime 运行时剖析
 
 + async 运行时是用于执行async 应用程序的库
