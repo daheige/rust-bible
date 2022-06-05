@@ -282,6 +282,9 @@ https://github.com/async-rs/async-std/tree/master/examples/a-chat
 + https://github.com/rust-lang/async-book
 + https://book.async.rs/
 
+# async-book demo
+https://github.com/rust-lang/async-book/tree/master/examples
+
 # async 生态兼容性如何确定
 + 与async I/O、计时器、进程间通信或任务交互的async代码通常取决于特定的异步执行器或反应器
 + 所有其他 async 代码，如异步表达式、组合器、同步类型和流，通常与生态系统无关，
