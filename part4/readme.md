@@ -282,7 +282,7 @@ https://github.com/async-rs/async-std/tree/master/examples/a-chat
 + https://github.com/rust-lang/async-book
 + https://book.async.rs/
 
-# async-book demo
+# async-book example
 https://github.com/rust-lang/async-book/tree/master/examples
 
 # async 生态兼容性如何确定
