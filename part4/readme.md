@@ -279,7 +279,8 @@ task::block_on(async {
 https://github.com/async-rs/async-std/tree/master/examples/a-chat
 
 # async异步参考
-https://learnku.com/docs/async-book/2018 https://book.async.rs/
++ https://github.com/rust-lang/async-book
++ https://book.async.rs/
 
 # async 生态兼容性如何确定
 + 与async I/O、计时器、进程间通信或任务交互的async代码通常取决于特定的异步执行器或反应器
