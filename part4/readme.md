@@ -1,11 +1,11 @@
 # rust async 异步编程基础
     
-    1.futures 和 async-std运行机制研究
-    2.tokio 运行时研究
+    1.futures crate 和 async-std crate 运行机制研究
+    2.tokio crate 运行时研究
     
     rust 目前只提供了编写async 代码的基本要素，标准库中尚未提供执行器 executor,
     任务task,wake反应器、组合器以及低级 I/O future 和 trait
-    社区提供的async 生态主要是futures,async-std,tokio三个
+    社区提供的async 运行时生态主要是async-std,tokio
 
 # async runtime 运行时剖析
 
