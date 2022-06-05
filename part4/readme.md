@@ -24,11 +24,19 @@
     它以一种非常轻量级的办法达成目标；语言本身标识的是 Send 和 Sync trait，并在可能的条件下，
     通过派生这两个标记帮助我们达成目的。剩下的就是库要处理的问题了。
 
-# async/await
-    async/.await是rust语言用于编写同步代码像异步代码一样的内置工具
-    async将一个代码块转换为一个实现了 Future trait 的状态机。
-    虽然在同步的方法中调用阻塞函数会阻塞整个线程，但阻塞的 Futures 将让出线程所有权,
-    允许其他的 Futures 运行。
+# 什么是async/await
++ async/.await是rust语言用于编写同步代码像异步代码一样的内置工具 
++ async将一个代码块转换为一个实现了 Future trait 的状态机
++ 虽然在同步的方法中调用阻塞函数会阻塞整个线程，但阻塞的 Futures 将让出线程所有权, 允许其他的 Futures 运行。
+
+深入理解：
++ async/.await 是rust特殊语法，在发生阻塞时候，它让放弃当前线程的控制权成为可能，
+这就允许在等待操作完成的时候，允许线程运行其他代码。
++ .await 会驱动future执行，如果执行时候发生了阻塞，就会让出控制权，让线程执行其他代码
+也就是说.await 会等待，直到future 变成 Poll::Ready(T) 同时await最终会解析出future值，放入T
++ 获得Future 的所有权，并对其进行poll 
++ 如果Future Ready ，其最终值就是 await 表达式的值，这时执行就可以继续了
+    否则就返回 Pending 给调用者
 
 # rust Future原理--简单抽象理解
 ```rust
