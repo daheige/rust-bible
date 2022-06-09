@@ -154,8 +154,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ```
 
-# grpc go grpc demo
+# go grpc demo
 https://github.com/daheige/gmicro-demo
 
 # rust grpc参考
 https://cloud.tencent.com/developer/article/1669569
+
