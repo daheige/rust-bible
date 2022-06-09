@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+// protoc 3.11.4+ 版本请用这个
+option go_package = ".;pb";
+
+
+package App.Grpc.Hello; // 指定生成php文件的命名空间，防止命名冲突
+import "google/api/annotations.proto";
+
+// service 定义开放调用的服务
+service GreeterService {
+    rpc SayHello (HelloReq) returns (HelloReply){
+        option (google.api.http) = {
+            get: "/v1/say/{id}"
+        };
+    };
+}
+
+// message 对应生成代码的 struct
+// 定义客户端请求的数据格式
+// @validator=HelloReq
+message HelloReq {
+    // [修饰符] 类型 字段名 = 标识符;
+    // @inject_tag: json:"id" validate:"required,min=1"
+    int64 id = 1;
+
+    // @inject_tag: json:"name"
+    string name = 2;
+}
+
+// 定义服务端响应的数据格式
+message HelloReply {
+    // @inject_tag: json:"name"
+    string name = 1;
+
+    // @inject_tag: json:"message"
+    string message = 2;
+}
