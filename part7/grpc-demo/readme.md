@@ -154,9 +154,32 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ```
 
-# go grpc demo
-https://github.com/daheige/gmicro-demo
+# 运行 server
+```shell
+% cargo run --bin grpc-demo
+Finished dev [unoptimized + debuginfo] target(s) in 0.12s
+ Running `target/debug/grpc-demo`
+grpc server run:127.0.0.1:8081
+
+```
+
+# 运行 client
+```shell
+% cargo run --bin grpc-demo-client
+Compiling grpc-demo v0.1.0 (/web/rust/rust-bible/part7/grpc-demo)
+Finished dev [unoptimized + debuginfo] target(s) in 1.21s
+Running `target/debug/grpc-demo-client`
+client:GreeterServiceClient { inner: Grpc { inner: Channel } }
+res:Response { metadata: MetadataMap { headers: {"content-type": "application/grpc", "date": "Sat, 11 Jun 2022 13:45:53 GMT", "grpc-status": "0"} }, message: HelloReply { name: "daheige", message: "hello,rust grpc" }, extensions: Extensions }
+name:daheige
+message:hello,rust grpc
+```
 
 # rust grpc参考
 https://cloud.tencent.com/developer/article/1669569
 
+# go grpc gmicro
+https://github.com/daheige/gmicro
+
+# go grpc demo
+https://github.com/daheige/gmicro-demo

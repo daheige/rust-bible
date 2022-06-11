@@ -1,8 +1,8 @@
 use hello::greeter_service_client::GreeterServiceClient;
-use hello::{HelloReply, HelloReq};
+use hello::HelloReq;
 
 // tonic request
-use tonic::{Request, Response};
+use tonic::Request;
 
 mod hello {
     tonic::include_proto!("App.Grpc.Hello"); // 必须和hello.proto package一样
@@ -15,7 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         name: "daheige".into(),
     });
 
-    let mut client = GreeterServiceClient::connect("http://[::1]:8081").await?;
+    let mut client = GreeterServiceClient::connect("http://127.0.0.1:8081").await?;
     println!("client:{:?}", client);
 
     let response = client.say_hello(request).await?;
