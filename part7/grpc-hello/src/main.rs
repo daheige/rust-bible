@@ -39,7 +39,7 @@ fn main() {
     println!("greeter server started on port {} without tls", port,);
 
     // 防止主线程退出
-    // 这里好像启动补起来，估计是grpc rust bug.
+    // 这里好像启动不起来，估计是grpc rust bug.
     // 推荐使用tonic
     loop {
         thread::park();
