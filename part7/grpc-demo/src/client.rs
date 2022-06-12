@@ -1,12 +1,13 @@
-use hello::greeter_service_client::GreeterServiceClient;
-use hello::HelloReq;
+use rust_grpc::hello::greeter_service_client::GreeterServiceClient;
+use rust_grpc::hello::HelloReq;
 
 // tonic request
 use tonic::Request;
 
-mod hello {
-    tonic::include_proto!("App.Grpc.Hello"); // 必须和hello.proto package一样
-}
+// mod hello {
+//     tonic::include_proto!("App.Grpc.Hello"); // 必须和hello.proto package一样
+// }
+mod rust_grpc;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
