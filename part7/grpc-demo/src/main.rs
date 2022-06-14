@@ -3,6 +3,7 @@ use rust_grpc::hello::{HelloReply, HelloReq};
 
 use tonic::{transport::Server, Request, Response, Status};
 
+// 定义grpc代码生成的包名
 mod rust_grpc;
 
 // 实现hello.proto 接口服务
