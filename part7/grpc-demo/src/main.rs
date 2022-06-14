@@ -1,16 +1,7 @@
-// 生成的 greeter_service_server mod
-// 然后生成 GreeterService trait 和 GreeterServiceServer
 use rust_grpc::hello::greeter_service_server::{GreeterService, GreeterServiceServer};
 use rust_grpc::hello::{HelloReply, HelloReq};
 
 use tonic::{transport::Server, Request, Response, Status};
-
-// 指定protobuf文件的rust package
-// 这些内容放在 grpc-demo/target/debug/build/grpc-demo-991bac770132394e/out/hello
-// 可以自己查看生成的grpc rust代码
-// mod hello {
-//     tonic::include_proto!("App.Grpc.Hello"); // 必须和hello.proto package一样
-// }
 
 mod rust_grpc;
 
