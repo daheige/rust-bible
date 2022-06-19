@@ -1,3 +1,9 @@
+# part6
+    inject-demo 手动依赖处理
+    shak-inject-demo 自动依赖注入
+    clap-demo cli命令终端使用
+    clap-regular-use clap 子命名使用
+
 # inject-demo
     rust依赖注入
 
@@ -21,3 +27,7 @@ D又反过来依赖A,B等等，这种设计在项目中通篇都是全局变量�
 # rust依赖注入工具
 - https://github.com/AzureMarker/shaku
 - https://github.com/dmitryb-dev/waiter
+
+# rust命令终端clap使用
+- https://github.com/clap-rs/clap
+- https://github.com/clap-rs/clap/tree/v3.2.5/examples/tutorial_derive

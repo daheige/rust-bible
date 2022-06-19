@@ -11,17 +11,17 @@ https://www.rust-lang.org/zh-CN/tools/install
     part3 redis,mysql,kafka和pulsar mq基本使用
     part4 rust异步编程基础--tokio和async-std两种不同的异步操作库使用
     part5 axum,actix-web,tide框架使用
-    part6 rust 依赖注入和ddd领域驱动设计
+    part6 rust 依赖注入和clap命令终端使用
     part7 rust实战(rust web/job/grpc）综合使用
 
 # rust安装
 
-https://www.rust-lang.org/zh-CN/tools/install
-https://kaisery.github.io/trpl-zh-cn/ch01-01-installation.html
+- https://www.rust-lang.org/zh-CN/tools/install
+- https://kaisery.github.io/trpl-zh-cn/ch01-01-installation.html
 
-	建议安装到rust v1.58.0+版本
+    建议安装到rust v1.58.0+版本
     shell安装
-	curl https://sh.rustup.rs -sSf | sh
+    curl https://sh.rustup.rs -sSf | sh
     对于centos7安装请看 rust-centos7-install.md
     
     rust升级执行如下操作：
@@ -101,12 +101,11 @@ https://kaisery.github.io/trpl-zh-cn/ch01-01-installation.html
 
 # rust语言程序设计
 
-rust程序设计第二版 https://kaisery.github.io/trpl-zh-cn/title-page.html
-
-配套代码 https://github.com/daheige/myrust
+- rust程序设计第二版 https://kaisery.github.io/trpl-zh-cn/title-page.html
+- 配套代码 https://github.com/daheige/myrust
 
 # rust crates官网
-在这个官网https://crates.io/
+https://crates.io/
 可以搜到很多有用的第三方包，比如axum,actix-web,tide,serde等等
 
 # rust std库
