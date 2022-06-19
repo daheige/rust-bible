@@ -104,6 +104,9 @@ https://www.rust-lang.org/zh-CN/tools/install
 - rust程序设计第二版 https://kaisery.github.io/trpl-zh-cn/title-page.html
 - 配套代码 https://github.com/daheige/myrust
 
+# rust package发布方法
+https://zhuanlan.zhihu.com/p/477390034
+
 # rust crates官网
 https://crates.io/
 可以搜到很多有用的第三方包，比如axum,actix-web,tide,serde等等
