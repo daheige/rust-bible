@@ -4,20 +4,16 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct HelloReq {
     /// \[修饰符\] 类型 字段名 = 标识符;
-    /// @inject_tag: json:"id" validate:"required,min=1"
     #[prost(int64, tag="1")]
     pub id: i64,
-    /// @inject_tag: json:"name"
     #[prost(string, tag="2")]
     pub name: ::prost::alloc::string::String,
 }
 /// 定义服务端响应的数据格式
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct HelloReply {
-    /// @inject_tag: json:"name"
     #[prost(string, tag="1")]
     pub name: ::prost::alloc::string::String,
-    /// @inject_tag: json:"message"
     #[prost(string, tag="2")]
     pub message: ::prost::alloc::string::String,
 }
@@ -101,7 +97,7 @@ pub mod greeter_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/Hello.GreeterService/SayHello",
+                "/App.Grpc.Hello.GreeterService/SayHello",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -167,7 +163,7 @@ pub mod greeter_service_server {
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/Hello.GreeterService/SayHello" => {
+                "/App.Grpc.Hello.GreeterService/SayHello" => {
                     #[allow(non_camel_case_types)]
                     struct SayHelloSvc<T: GreeterService>(pub Arc<T>);
                     impl<T: GreeterService> tonic::server::UnaryService<super::HelloReq>
@@ -239,6 +235,6 @@ pub mod greeter_service_server {
         }
     }
     impl<T: GreeterService> tonic::transport::NamedService for GreeterServiceServer<T> {
-        const NAME: &'static str = "Hello.GreeterService";
+        const NAME: &'static str = "App.Grpc.Hello.GreeterService";
     }
 }

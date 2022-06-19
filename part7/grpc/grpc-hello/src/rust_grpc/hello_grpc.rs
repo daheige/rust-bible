@@ -42,7 +42,7 @@ impl ::grpc::ClientStub for GreeterServiceClient {
 impl GreeterServiceClient {
     pub fn say_hello(&self, o: ::grpc::RequestOptions, req: super::hello::HelloReq) -> ::grpc::SingleResponse<super::hello::HelloReply> {
         let descriptor = ::grpc::rt::ArcOrStatic::Static(&::grpc::rt::MethodDescriptor {
-            name: ::grpc::rt::StringOrStatic::Static("/App.Grpc.Hello.GreeterService/SayHello"),
+            name: ::grpc::rt::StringOrStatic::Static("/Hello.GreeterService/SayHello"),
             streaming: ::grpc::rt::GrpcStreaming::Unary,
             req_marshaller: ::grpc::rt::ArcOrStatic::Static(&::grpc_protobuf::MarshallerProtobuf),
             resp_marshaller: ::grpc::rt::ArcOrStatic::Static(&::grpc_protobuf::MarshallerProtobuf),
@@ -59,11 +59,11 @@ pub struct GreeterServiceServer;
 impl GreeterServiceServer {
     pub fn new_service_def<H : GreeterService + 'static + Sync + Send + 'static>(handler: H) -> ::grpc::rt::ServerServiceDefinition {
         let handler_arc = ::std::sync::Arc::new(handler);
-        ::grpc::rt::ServerServiceDefinition::new("/App.Grpc.Hello.GreeterService",
+        ::grpc::rt::ServerServiceDefinition::new("/Hello.GreeterService",
             vec![
                 ::grpc::rt::ServerMethod::new(
                     ::grpc::rt::ArcOrStatic::Static(&::grpc::rt::MethodDescriptor {
-                        name: ::grpc::rt::StringOrStatic::Static("/App.Grpc.Hello.GreeterService/SayHello"),
+                        name: ::grpc::rt::StringOrStatic::Static("/Hello.GreeterService/SayHello"),
                         streaming: ::grpc::rt::GrpcStreaming::Unary,
                         req_marshaller: ::grpc::rt::ArcOrStatic::Static(&::grpc_protobuf::MarshallerProtobuf),
                         resp_marshaller: ::grpc::rt::ArcOrStatic::Static(&::grpc_protobuf::MarshallerProtobuf),

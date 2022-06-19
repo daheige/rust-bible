@@ -419,12 +419,12 @@ impl ::protobuf::reflect::ProtobufValue for HelloReply {
 }
 
 static file_descriptor_proto_data: &'static [u8] = b"\
-    \n\x0bhello.proto\x12\x0eApp.Grpc.Hello\".\n\x08HelloReq\x12\x0e\n\x02id\
-    \x18\x01\x20\x01(\x03R\x02id\x12\x12\n\x04name\x18\x02\x20\x01(\tR\x04na\
-    me\":\n\nHelloReply\x12\x12\n\x04name\x18\x01\x20\x01(\tR\x04name\x12\
-    \x18\n\x07message\x18\x02\x20\x01(\tR\x07message2R\n\x0eGreeterService\
-    \x12@\n\x08SayHello\x12\x18.App.Grpc.Hello.HelloReq\x1a\x1a.App.Grpc.Hel\
-    lo.HelloReplyB\x06Z\x04.;pbb\x06proto3\
+    \n\x0bhello.proto\x12\x05Hello\".\n\x08HelloReq\x12\x0e\n\x02id\x18\x01\
+    \x20\x01(\x03R\x02id\x12\x12\n\x04name\x18\x02\x20\x01(\tR\x04name\":\n\
+    \nHelloReply\x12\x12\n\x04name\x18\x01\x20\x01(\tR\x04name\x12\x18\n\x07\
+    message\x18\x02\x20\x01(\tR\x07message2@\n\x0eGreeterService\x12.\n\x08S\
+    ayHello\x12\x0f.Hello.HelloReq\x1a\x11.Hello.HelloReplyB\x06Z\x04.;pbb\
+    \x06proto3\
 ";
 
 static file_descriptor_proto_lazy: ::protobuf::rt::LazyV2<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::rt::LazyV2::INIT;
