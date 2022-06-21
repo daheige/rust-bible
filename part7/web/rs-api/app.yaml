@@ -1,0 +1,5 @@
+AppService:
+  name: rs-api
+  port: 3000
+  app_debug: true
+
