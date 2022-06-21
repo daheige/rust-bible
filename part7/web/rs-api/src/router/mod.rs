@@ -1,4 +1,13 @@
 mod api;
 
-pub use api::create_user;
-pub use api::home;
+use axum::{
+    routing::{get, post},
+    Router,
+};
+
+pub fn create_app() -> Router {
+    let app = Router::new()
+        .route("/", get(api::home))
+        .route("/users", post(api::create_user));
+    app
+}
