@@ -5,5 +5,5 @@
 # redis-rs
 https://crates.io/crates/redis
 
-#r2d2
+# r2d2
 https://crates.io/crates/r2d2
