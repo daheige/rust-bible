@@ -1,6 +1,7 @@
 # part3
     redis-demo redis基本使用
     redis-async redis tokio async使用
+    redis-pool redis连接池模式
     pulsar-publish pulsar 发送者使用
     pulsar-consumer pulsar 消费者使用
     pulsar-batch pulsar spawn publish sub

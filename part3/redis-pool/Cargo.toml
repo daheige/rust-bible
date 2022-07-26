@@ -1,0 +1,10 @@
+[package]
+name = "redis-pool"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+redis = { version ="0.21.5",features = ["r2d2"]}
+r2d2 = "0.8.10"
