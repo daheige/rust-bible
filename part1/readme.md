@@ -19,6 +19,6 @@
     my-mod/my-mod2 rust mod模块使用方式
     command-line-demo rust cmd参数读取
     iterators 标准库Iterator trait迭代器使用
-    fearless_concurrent 无畏并发
+    concurrent fearless无畏并发
     async_await 异步执行future
     reqwest-demo rust reqwest使用

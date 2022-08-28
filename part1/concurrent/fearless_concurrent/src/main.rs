@@ -1,6 +1,7 @@
 use std::thread;
 use std::time::Duration;
 
+// Rust 的并发原语依赖于本机的操作系统线程，它在标准库中的 std::thread 模块中提供了线程 API。
 fn main() {
     println!("Hello, world!");
     // 1.使用 spawn 创建新线程
@@ -70,14 +71,15 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use std::sync::{Arc, mpsc, Mutex};
+    use std::sync::{mpsc, Arc, Mutex};
     use std::thread;
 
     #[test]
     fn message_pass() {
         let (tx, rx) = mpsc::channel(); // 创建一个无限缓冲的通道channel
-        // 发送消息
-        thread::spawn(move || { // 这里需要move 将tx所有权移动到闭包中
+                                        // 发送消息
+        thread::spawn(move || {
+            // 这里需要move 将tx所有权移动到闭包中
             let v = String::from("abc");
             tx.send(v).unwrap();
             // 一旦v被发送到通道中，v就会变成未初始化，不能再使用
@@ -118,10 +120,7 @@ mod tests {
         });
 
         thread::spawn(move || {
-            let s = vec![
-                String::from("hello"),
-                String::from("rust"),
-            ];
+            let s = vec![String::from("hello"), String::from("rust")];
             for v in s {
                 tx.send(v).unwrap();
             }
@@ -218,26 +217,26 @@ mod tests {
 
     // Arc 多个线程中安全操作的原子引用计数器Arc<T>
     #[test]
-    fn mutex_share_data(){
+    fn mutex_share_data() {
         let counter = Arc::new(Mutex::new(0));
         let mut handlers = vec![];
-        for i in 0..10{
+        for i in 0..10 {
             // 创建多个线程
             let counter = Arc::clone(&counter);
-            let handler = thread::spawn(move ||{
+            let handler = thread::spawn(move || {
                 let mut num = counter.lock().unwrap();
-                *num +=i;
+                *num += i;
             });
 
             // 将handle join句柄加入到handlers
             handlers.push(handler);
         }
 
-        for handler in handlers{
+        for handler in handlers {
             handler.join().unwrap();
         }
 
         // result: 45
-        println!("result: {}",*counter.lock().unwrap());
+        println!("result: {}", *counter.lock().unwrap());
     }
 }
