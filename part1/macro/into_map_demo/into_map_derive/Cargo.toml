@@ -1,0 +1,17 @@
+[package]
+name = "into_map_derive"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+#指定这是一个宏的组件库
+proc-macro = true
+
+[dependencies]
+# syn和quote帮助我们解析标记流实例中的rust代码
+# syn 负责ast的内存数据结构解析
+# quote是syn补充，允许用户在其中的quote!中生成rust代码，还允许用户替换syn数据类型中的值
+syn = { version = "1.0.99",features = ["extra-traits","derive"]}
+quote = "1.0.21"
+into_map = { path = "../into_map"}
