@@ -2,9 +2,6 @@
     基于rust edition = "2021" 
     需要安装rust v1.58.0 以上版本
 
-# rust install
-https://www.rust-lang.org/zh-CN/tools/install
-
 # rust从入门到实战--7大块
 - part1 rust基础,thread编程初体验
 - part2 serde json序列化处理，yaml文件读取，log日志库基础操作
@@ -15,7 +12,6 @@ https://www.rust-lang.org/zh-CN/tools/install
 - part7 rust实战(rust web/job/grpc）综合使用
 
 # rust安装
-
 - https://www.rust-lang.org/zh-CN/tools/install
 - https://kaisery.github.io/trpl-zh-cn/ch01-01-installation.html
 
@@ -76,12 +72,11 @@ https://www.rust-lang.org/zh-CN/tools/install
     [http]
     check-revoke = false
 
-# rust编辑器
+# rust编辑器选择
+可以使用vscode,clion都可以
 
-    可以使用vscode,clion都可以
-    对于vscode配置
-    rust vscode setting.json配置
-
+# vscode配置
+需要安装好 rust-analyzer 插件，然后配置setting.json
 ``` json
 {
     "files.eol": "\n",
@@ -92,9 +87,8 @@ https://www.rust-lang.org/zh-CN/tools/install
     "editor.formatOnPaste": true,
     "editor.multiCursorModifier": "ctrlCmd",
     "editor.snippetSuggestions": "top",
-    "rust-client.channel": "stable",
     "[rust]": {
-        "editor.defaultFormatter": "rust-lang.rust"
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
     }
 }
 ```
