@@ -24,3 +24,6 @@ Rust 中的借用规则由编译器中被称为借用检查器的组件进行分
 # 方法的参数借用规则
 对于方法的参数借用，除非你有意编写一个应该在结束时移动或删除 self 的
 函数，否则总是应该使用不可变的借用方法，即将&self作为第 1 个参数。
+
+# 借用和可变引用
+https://github.com/daheige/rust-bible/tree/main/part1/ref_var
