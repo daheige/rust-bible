@@ -1,3 +1,7 @@
+// 用于static声明全局静态值
+use lazy_static::lazy_static;
+use std::sync::Mutex;
+
 // let 变量解构
 #[derive(Debug)]
 enum Food {
@@ -27,6 +31,32 @@ enum Container {
 
 struct ContainerInfo {
     items_count: u32,
+}
+
+// const 定义全局常量
+const HEADER: &'static str = "abc"; // const定义常量，需要指定类型
+
+// 静态类型的全局变量用static修饰,它具有固定的内存位置，在程序中唯一实例存在
+// 存在安全性问题，对其读写需要在某个unsafe中完成
+static mut BAZ: u32 = 3;
+static FOO: u8 = 12;
+
+// 可以使用lazy_static!来将静态值动态化
+// 全局值只能在初始化时声明非动态的类型，并且在编译期，它在堆栈上的
+// 大小是已知的。例如，你不能将 HashMap 创建为静态值，因为它涉及堆分配。幸运的是，
+// 我们可以使用 HashMap 和其他动态集合类型（如 Vec）构造全局静态值，这是通过被称为
+// lazy_static 的第三方软件包实现的。它暴露了 lazy_static!宏，可用于初始化任何能够从程序
+// 中的任何位置全局访问的动态类型。
+// 对于lazy_static宏声明的元素需要实现Sync特征，当某个静态值可变，就需要使用mutex或rwlock来约束
+// 保证多线程操作安全，不发生data race
+lazy_static! {
+    static ref ITEMS: Mutex<Vec<u64>> = {
+        let mut v = vec![];
+        v.push(1);
+        v.push(2);
+        v.push(3);
+        Mutex::new(v)
+    };
 }
 
 // 可变引用的解构
@@ -161,6 +191,19 @@ fn main() {
     // String和&str之间的区别：&str自身能够北编译器识别，而String是标准库中的自定义类型
     let c = a.to_string() + b;
     println!("c = {}", c);
+
+    // const 定义全局常量
+    println!("HEADER:{}", HEADER);
+
+    // static静态值读写需要使用unsafe块来包裹起来
+    unsafe {
+        println!("baz:{}", BAZ);
+        BAZ = 12;
+        println!("baz now:{}", BAZ);
+        println!("foo:{}", FOO);
+    }
+
+    println!("items:{:?}", ITEMS.lock());
 }
 
 // 对刚接触 Rust 的程序员来说，辨别&str 和 String 的应用场景会存在一些困惑。最佳的
