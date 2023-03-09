@@ -1,3 +1,9 @@
+# thread并发
+Rust 内置了两种流行的并发模型：通过同步共享数据和通过消息传递共享数据。
+
+# spawn使用
+
+```rust
 use std::sync::Arc;
 use std::sync::Mutex;
 use std::thread;
@@ -121,3 +127,5 @@ fn main() {
 
     println!("nums: {:?}", nums); // nums: Mutex { data: [0, 1, 2, 4, 3], poisoned: false, .. }
 }
+
+```
