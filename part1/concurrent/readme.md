@@ -400,7 +400,7 @@ actor 模型是一种概念模型，它使用名为 actors 的实体在类型层
 - FIFO：队列通常是先进先出（First In First Out，FIFO）。actor 的地址是必需的，以便其他 actor 可以向其发送消息。超级 actor 能够创建其他子 actor 的子 actor。
 - Messages：actor 之间仅通过消息进行通信，它们由 actor 异步处理。actix-web 框架为异步包装器中的同步操作提供了一个很好的包装器
 
-典型的库有：actix,tokio,futures,async-std
+典型的库有：actix
 
 # rust其他程序库
 - 有一个名为 rayon 的程序库，它是一个基于工作窃取算法的数据并行程序库，使编写并发代码变得非常简单。
