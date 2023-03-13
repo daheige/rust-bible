@@ -13,6 +13,7 @@ futures::executor::block_on
    + 在async fn函数中，可以用.await来等待另一个实现Future trait的完成
    + 与block_on不同，.await不会阻塞当前线程，而是将异步的等待Future的完成
     （如果该Future目前无法完成，将允许其他任务执行）
+   + Rust 中的 Future 是惰性的，直到调用 .await 时，才会开始运行
 
 # demo
     参考async-demo
