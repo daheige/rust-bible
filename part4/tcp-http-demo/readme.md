@@ -13,7 +13,7 @@ where
 F: Future<Output = T> + Send + 'static,
 T: Send + 'static,
 {
-Builder::new().spawn(future).expect("cannot spawn task")
+    Builder::new().spawn(future).expect("cannot spawn task")
 }
 ```
 
