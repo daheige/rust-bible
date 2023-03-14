@@ -7,6 +7,7 @@
 ![](tcp-demo.jpg)
 
 # async-std spawn 并发函数的底层签名
+下面是 async_std::task::spawn的定义：
 ```rust
 pub fn spawn<F, T>(future: F) -> JoinHandle<T>
 where
@@ -15,7 +16,35 @@ T: Send + 'static,
 {
     Builder::new().spawn(future).expect("cannot spawn task")
 }
+// 和标准库的spawn签名相似
+#[stable(feature = "rust1", since = "1.0.0")]
+pub fn spawn<F, T>(f: F) -> JoinHandle<T>
+    where
+        F: FnOnce() -> T,
+        F: Send + 'static,
+        T: Send + 'static,
+{
+    Builder::new().spawn(f).expect("failed to spawn thread")
+}
 ```
+看的出标准库spawn，它是一个看上去非常烦琐的类型签名。让我们对其中的内容进行逐一分析。
+- spawn 是一个包含 F 和 T 的泛型函数，并且会接收一个参数 f，返回的泛型是
+  JoinHandle<T>。随后的 where 子句指定了多个特征边界。
+- F:FnOnce() -> T：这表示 F 实现了一个只能被调用一次的闭包。换句话说，f 是一
+  个闭包，通过值获取所有内容并移动从环境中引用的项。
+- F:Send + 'static：这表示闭包必须是发送型（Send），并且必须具有'static 的生命周
+  期，同时执行环境中闭包内引用的任何类型必须是发送型，必须在程序的整个生命
+  周期内存活。
+- T:Send + 'static：来自闭包的返回类型 T 必须实现 Send+'static 特征。
+  Send 是一种标记性特征。它只用于类型级标记，意味着可以安全地跨线程发送值；并
+  且大多数类型都是发送型。未实现 Send 特征的类型是指针、引用等。此外，Send 是自动
+  型特征或自动派生的特征。复合型数据类型，例如结构体，如果其中的所有字段都是 Send
+  型，那么该结构体实现了 Send 特征。
+
+对于async-std来说，仅仅是F变成了 F: Future<Output = T> + Send + 'static,
+- 它是一个trait Future 类型，并且可以安全地发送到多个线程，这表明该类型是一种移动类型。
+- 另外F具有'static 静态的生命周期，表明在整个程序中都是存活的，避免了future在执行poll的时候，生命周期发生改变。
+- T是也是和F具有相同的参数约束，是可以安全返回的，并且也是static生命周期类型，从而保证了并发安全性和内存安全。
 
 # mock TcpStream和unit test
 ```rust
