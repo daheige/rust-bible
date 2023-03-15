@@ -99,6 +99,13 @@ async fn increment_and_do_stuff(mutex: &Mutex<i32>) {
     例如，当使用一个循环去接收 TCP 连接时，你要确保当前打开的 socket 数量在可控范围内，
     而不是毫无原则的接收连接。 再比如，当使用 mpsc::channel 时，要设置一个缓冲值。
 
+# async小结
+- 在 Rust 中，async 是惰性的，直到执行器 poll 它们时，才会开始执行 
+- Waker 是 Future 被执行的关键，它可以链接起 Future 任务和执行器
+- 当资源没有准备时，会返回一个 Poll::Pending
+- 当资源准备好时，会通过 waker.wake 发出通知
+- 执行器会收到通知，然后调度该任务继续执行，此时由于资源已经准备好，因此任务可以顺利往前推进了
+
 # tokio 神秘面纱参考
     https://zhuanlan.zhihu.com/p/460984955
     https://zhuanlan.zhihu.com/p/461044853
