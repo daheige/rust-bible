@@ -30,12 +30,14 @@ async fn incr_task(i: &Increment) {
 
 // #[tokio::main] 将最外层 Future 提交给 Tokio 的执行器。该执行器负责调用 poll 函数，
 // 然后推动 Future 的执行，最终直至完成
-
+//
+// // 由于 async 会返回一个 Future，因此我们还需要配合使用 .await 来让该 Future 运行起来
+// .await 只能用于 async fn 函数中，因此我们将 main 函数声明成 async fn main
+// 同时使用 #[tokio::main] 进行了标注
 #[tokio::main]
 async fn main() {
     let op = say_to_world();
     println!("hello");
-    // 由于 async 会返回一个 Future，因此我们还需要配合使用 .await 来让该 Future 运行起来，
     // 最终获得返回值:
     println!("op :{}", op.await);
 
@@ -68,7 +70,7 @@ async fn main() {
     let v = vec![1, 2, 3];
     // 创建异步任务
     // 这里需要使用move关键字将v 所有权移动到闭包函数中
-    let handler = task::spawn(async move {
+    let handler = spawn(async move {
         println!("hello");
         println!("vec:{:?}", v);
     });
@@ -106,13 +108,13 @@ async fn main() {
     let (tx, mut rx) = mpsc::channel(32);
     let tx2 = tx.clone(); // 这里tx是允许多次clone，并发送消息到通道中
     let tx3 = tx.clone();
-    tokio::spawn(async move {
+    spawn(async move {
         tx.send("sending from first handle").await;
     });
-    tokio::spawn(async move {
+    spawn(async move {
         tx2.send("sending from second handle").await;
     });
-    tokio::spawn(async move {
+    spawn(async move {
         tx3.send("sending from three handle").await;
     });
 
@@ -125,7 +127,7 @@ async fn main() {
     }
 
     // 使用 oneshot 实现消息无通道发送和接收
-    let t1 = tokio::spawn(async move {
+    let t1 = spawn(async move {
         let (tx, rx) = oneshot::channel(); // 无缓冲通道
 
         // 往 oneshot 中发送消息时，并没有使用 .await，原因是该发送操作要么直接成功、要么失败，并不需要等待
@@ -140,9 +142,6 @@ async fn main() {
     let when = Instant::now() + Duration::from_millis(10);
     let future = Delay { when };
     let out = future.await; // 执行
-
-    // .await 只能用于 async fn 函数中，因此我们将 main 函数声明成 async fn main
-    // 同时使用 #[tokio::main] 进行了标注
     println!("out:{}", out);
     assert_eq!(out, "done");
 }

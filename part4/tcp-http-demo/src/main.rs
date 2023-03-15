@@ -10,6 +10,10 @@ use std::marker::Unpin;
 
 // 通过async_std::main 包裹main函数使得它可以修饰为async的方式运行
 // 它可以将main函数修改为异步的
+//
+// .await 只能用于 async fn 函数中
+// 因此我们将 main 函数声明成 async fn main
+// 同时使用 #[tokio::main] 进行了标注
 #[async_std::main]
 async fn main() {
     // 监听本地端口，等待 tcp 连接的建立
