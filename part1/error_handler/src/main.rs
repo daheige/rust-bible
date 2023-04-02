@@ -95,6 +95,29 @@ mod tests {
             println!("s :{}", s);
         }
     }
+
+    #[test]
+    fn test_foo() {
+        let res = super::foo(1);
+        // 第一种写法if let OK
+        if let Ok(x) = res {
+            println!("res :{}", x);
+        } else {
+            println!("err: {}", res.err().unwrap());
+        }
+
+        // 第二种写法xxx.is_err()
+        // if res.is_err() {
+        //     println!("err:{}", res.err().unwrap());
+        //     return;
+        // }
+        //
+        // println!("res :{}", res.unwrap());
+
+        /*
+
+        */
+    }
 }
 /*
 关于panic！和 Result<T,E> 错误传播处理的选择
@@ -109,3 +132,12 @@ Rust 类型系统的 Result 枚举代表操作可能会在一种可以恢复的�
 可以使 用 Result 来告诉代码调用者他需要处理潜在的成功或失败。
 在适当的场景使用 panic! 和 Result 将会使你的代码在面 对无处不在的错误时显得更加可靠。
  */
+
+fn foo(x: i64) -> Result<i64, String> {
+    if x <= 1 {
+        return Err("x invalid".to_string());
+    }
+
+    println!("x = {}", x);
+    Ok(x)
+}
