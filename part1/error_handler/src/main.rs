@@ -96,27 +96,40 @@ mod tests {
         }
     }
 
+    // 一般来说选择if let 模式匹配和match,is_err都可以
+    // 比较常用的是if let 模式匹配和match模式匹配，每个团队规范不一样
+    // 对于if let模式匹配和xxx.is_err()的写法，一般适合只有一种情况的match，比较推荐
     #[test]
     fn test_foo() {
         let res = super::foo(1);
         // 第一种写法if let OK
-        if let Ok(x) = res {
-            println!("res :{}", x);
-        } else {
-            println!("err: {}", res.err().unwrap());
-        }
+        // if let Ok(x) = res {
+        //     println!("res :{}", x);
+        // } else {
+        //     println!("err: {}", res.err().unwrap());
+        // }
 
-        // 第二种写法xxx.is_err()
+        // 第二种写法xxx.is_err() 或者 xxx.is_ok()
         // if res.is_err() {
         //     println!("err:{}", res.err().unwrap());
         //     return;
         // }
         //
         // println!("res :{}", res.unwrap());
+        //
+        // if res.is_ok() { // 没有error的时候
+        //     println!("res :{}", res.unwrap());
+        // }
 
-        /*
-
-        */
+        // 第三种写法 match模式匹配
+        match res {
+            Err(err) => {
+                println!("err: {}", err);
+            }
+            Ok(x) => {
+                println!("x = {}", x);
+            }
+        }
     }
 }
 /*
