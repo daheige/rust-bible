@@ -11,6 +11,7 @@
 # pulsar in docker
 
     run pulsar in docker
+```shell
     docker run -dit \
     --name pulsar-sever \
     -p 6650:6650 \
@@ -19,3 +20,4 @@
     --mount source=pulsarconf,target=/pulsar/conf \
     apachepulsar/pulsar:2.7.4 \
     bin/pulsar standalone
+```
