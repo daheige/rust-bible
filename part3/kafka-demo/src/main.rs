@@ -8,9 +8,12 @@ fn main() {
     let broker = "localhost:9092";
     let topic = "my-topic";
     let data = "hello,rust".as_bytes();
-
-    if let Err(e) = message_publish(data, topic, vec![broker.to_owned()]) {
-        println!("failed producing message error:{}", e);
+    let mut i = 0;
+    while i < 1000 {
+        if let Err(e) = message_publish(data, topic, vec![broker.to_owned()]) {
+            println!("failed producing message error:{}", e);
+        }
+        i += 1;
     }
 }
 
