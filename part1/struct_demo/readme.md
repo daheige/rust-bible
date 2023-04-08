@@ -107,3 +107,16 @@ fn main() {
 }
 
 ```
+
+# 类单元结构体
+```rust
+// 类单元结构体，没有任何字段
+#[derive(Debug)]
+struct Marker;
+
+fn main() {
+    let m = Marker;
+    println!("m:{:?}",m);
+}
+```
+
