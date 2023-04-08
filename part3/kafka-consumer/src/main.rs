@@ -1,18 +1,21 @@
 use kafka::consumer::{Consumer, FetchOffset, GroupOffsetStorage};
 use kafka::error::Error as KafkaError;
 // use kafka::producer::AsBytes;
+use log::{error, info};
+use std::env;
 use std::thread;
 use std::time::Duration;
-
 fn main() {
+    env::set_var("RUST_LOG", "debug");
     env_logger::init();
     let broker = "localhost:9092".to_owned();
     let topic = "my-topic";
     let group = "my-group-2";
 
+    info!("consumer message begin...");
     // consumer message
     if let Err(err) = consumer_message(group, topic, vec![broker]) {
-        println!("consumer message err:{}", err);
+        error!("consumer message err:{}", err);
     }
 }
 
