@@ -1,6 +1,6 @@
 use kafka::consumer::{Consumer, FetchOffset, GroupOffsetStorage};
 use kafka::error::Error as KafkaError;
-use kafka::producer::AsBytes;
+// use kafka::producer::AsBytes;
 use std::thread;
 use std::time::Duration;
 
@@ -16,11 +16,7 @@ fn main() {
     }
 }
 
-fn consumer_message<'a, 'b>(
-    group: &'a str,
-    topic: &'b str,
-    brokers: Vec<String>,
-) -> Result<(), KafkaError> {
+fn consumer_message(group: &str, topic: &str, brokers: Vec<String>) -> Result<(), KafkaError> {
     // create consumer connection
     let mut con = Consumer::from_hosts(brokers)
         .with_topic(topic.to_string())

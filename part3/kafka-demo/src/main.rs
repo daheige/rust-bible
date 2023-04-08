@@ -27,11 +27,7 @@ fn main() {
 }
 
 // send message
-fn message_publish<'a, 'b>(
-    data: &'a [u8],
-    topic: &'b str,
-    brokers: Vec<String>,
-) -> Result<(), KafkaError> {
+fn message_publish(data: &[u8], topic: &str, brokers: Vec<String>) -> Result<(), KafkaError> {
     println!("publish message at {:?} to {}", brokers, topic);
 
     // create producer
