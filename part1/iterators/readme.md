@@ -17,4 +17,17 @@ fn main() {
     }
 }
 
+// output:
+// current x = 0
+// current x = 1
+// current x = 2
+// current x = 3
+// current x = 4
+// x = 0
+// x = 1
+// x = 2
+// x = 3
+// x = 4
+// x = 5
+
 ```
