@@ -29,8 +29,8 @@ fn consumer_message<'a, 'b>(
         .with_offset_storage(GroupOffsetStorage::Kafka)
         .create()?;
     loop {
-        let message = con.poll()?;
-        if message.is_empty() {
+        let message_sets = con.poll()?;
+        if message_sets.is_empty() {
             println!("no message available right now");
             thread::sleep(Duration::from_secs(2));
             continue;
@@ -38,7 +38,7 @@ fn consumer_message<'a, 'b>(
         }
 
         // 为了方便查看value，我这里转换为了string格式
-        for ms in message.iter() {
+        for ms in message_sets.iter() {
             for m in ms.messages() {
                 println!(
                     "topic:{} partition:{}@offset:{}: value:{:?}",

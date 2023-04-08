@@ -7,12 +7,21 @@ fn main() {
     println!("kafka demo....");
     let broker = "localhost:9092";
     let topic = "my-topic";
-    let data = "hello,rust".as_bytes();
     let mut i = 0;
     while i < 1000 {
-        if let Err(e) = message_publish(data, topic, vec![broker.to_owned()]) {
+        // let data = "hello world,rust";
+        // if let Err(e) = message_publish(data.as_bytes(), topic, vec![broker.to_owned()]) {
+        //     println!("failed producing message error:{}", e);
+        // }
+        println!("current index:{}", i);
+        if let Err(e) = message_publish(
+            format!("hello world: {}", i).as_bytes(),
+            topic,
+            vec![broker.to_owned()],
+        ) {
             println!("failed producing message error:{}", e);
         }
+
         i += 1;
     }
 }
