@@ -1,10 +1,11 @@
+// 定义结构体
 #[derive(Debug)]
 struct Rectangle {
     width: u32,
     height: u32,
 }
 
-// impl给结构体增加方法
+// 通过impl给结构体增加方法
 // impl 是 implementation 的缩写
 impl Rectangle {
     // 静态方法
