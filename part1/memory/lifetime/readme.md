@@ -9,7 +9,7 @@
 # 显式标注生命周期的场景
 当 Rust 无法为我们代劳时，有很多地方需要用户指定生命周期，主要体现这些地方：
 - 函数签名
-- 结构体和结构体字段
+- 结构体和结构体中包含引用任何类型的字段
 - impl 代码块
 
 ```rust
@@ -136,6 +136,22 @@ fn main() {
     let name = "common";
     let log = Logger(name, Level::Info);
     configure_logger(log); // t:Logger("common", Info)
+}
+
+```
+# 结构体包含引用任何类型的字段
+```rust
+// 结构体中包含引用任何类型的字段时候，需要明确指定这些引用的生命周期
+struct Foo<'a> {
+    i:&'a i32
+}
+
+fn main() {
+    let x = 42;
+    let foo = Foo {
+        i: &x
+    };
+    println!("{}",foo.i);
 }
 
 ```
