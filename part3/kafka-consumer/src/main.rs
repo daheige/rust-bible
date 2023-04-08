@@ -8,7 +8,7 @@ fn main() {
     env_logger::init();
     let broker = "localhost:9092".to_owned();
     let topic = "my-topic";
-    let group = "my-group-1";
+    let group = "my-group-2";
 
     // consumer message
     if let Err(err) = consumer_message(group, topic, vec![broker]) {
@@ -37,8 +37,9 @@ fn consumer_message(group: &str, topic: &str, brokers: Vec<String>) -> Result<()
         for ms in message_sets.iter() {
             for m in ms.messages() {
                 println!(
-                    "topic:{} partition:{}@offset:{}: value:{:?}",
+                    "topic:{} group:{} partition:{}@offset:{}: value:{:?}",
                     ms.topic(),
+                    group,
                     ms.partition(),
                     m.offset,
                     String::from_utf8(m.value.to_owned()).unwrap_or("".to_string()),
