@@ -20,3 +20,7 @@ docker run -dit \
   apachepulsar/pulsar:2.9.4 \
   bin/pulsar standalone
 ```
+
+# kafka in docker
+https://github.com/go-god/broker/tree/main/gkafka/dockerconfig
+
