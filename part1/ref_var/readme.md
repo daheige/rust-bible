@@ -26,6 +26,7 @@ fn main() {
     // let f3 = &mut foo; // 又一次可变借用
 
     // 下面的运行println! 使得可变引用和借用同时存在
+    // Rust 只允许同时存在一个可变引用或者多个不可变引用，不允许可变引用和不可变引用同时存在
     println!("f = {:?},f2 = {:?} ", f, f2); // 这里直接报错 - immutable borrow later used here
 
     // 为什么下面的代码又可以呢？
@@ -36,6 +37,21 @@ fn main() {
     // foo 在这里被 dropped 释放
 }
 
+```
+这段代码运行时会抛出错误,也就是上面提到的借用规则生效了
+```rust
+ Compiling playground v0.0.1 (/playground)
+error[E0502]: cannot borrow `foo` as mutable because it is also borrowed as immutable
+  --> src/main.rs:15:14
+   |
+13 |     let f = &foo; //  ---- immutable borrow occurs here
+   |             ---- immutable borrow occurs here
+14 |     // cannot borrow `foo` as mutable because it is also borrowed as immutable
+15 |     let f2 = &mut foo; // 一次可变借用 ^^^^^^^^ mutable borrow occurs here
+   |              ^^^^^^^^ mutable borrow occurs here
+...
+19 |     println!("f = {:?},f2 = {:?} ", f, f2); // 这里直接报错 - immutable borrow later used here
+   |                                     - immutable borrow later used here
 ```
 
 
