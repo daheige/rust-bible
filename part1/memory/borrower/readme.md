@@ -25,5 +25,55 @@ Rust 中的借用规则由编译器中被称为借用检查器的组件进行分
 对于方法的参数借用，除非你有意编写一个应该在结束时移动或删除 self 的
 函数，否则总是应该使用不可变的借用方法，即将&self作为第 1 个参数。
 
+# 关于借用和可变引用的规则
+```rust
+// 借用和可变引用使用
+
+// 定义结构体Foo
+#[derive(Debug)]
+struct Foo {
+    x: i32,
+}
+
+// 返回所有权
+fn get_foo_ownship() -> Foo {
+    Foo { x: 42 }
+    // 所有权被移出
+}
+
+// 借用
+fn say(f: &Foo) {
+    println!("hello,{}", f.x);
+}
+
+// 传递可变引用，改变x的值
+fn change(f: &mut Foo) {
+    f.x = 12;
+}
+
+fn main() {
+    let mut foo = get_foo_ownship();
+    // foo 成为了所有者
+    // foo 在函数域结尾被 dropped 释放
+    println!("foo.x = {}", foo.x);
+    say(&foo); // 借用的方式传递参数
+    change(&mut foo); // 改变foo
+    say(&foo);
+    let f = &mut foo;
+    let f3 = &mut foo;
+    println!("{:?}",f3);
+
+    // 借用规则如下：
+    // 1、同一时刻，你只能拥有要么一个可变引用, 要么任意多个不可变引用
+    // 2、引用必须总是有效的
+    // 可变引用与不可变引用不能同时存在
+    // let mut s = String::from("daheige");
+    // let s1 = &s; //  -- immutable borrow occurs here
+    // let s2 = &s;
+    // let s3 = &mut s; // ^^^^^^ mutable borrow occurs here
+    // println!("s1 = {},s2 = {},s = {}", s1, s2, s); // s1 -- immutable borrow later used here
+}
+```
+
 # 借用和可变引用
 https://github.com/daheige/rust-bible/tree/main/part1/ref_var
