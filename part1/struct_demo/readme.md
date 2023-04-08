@@ -93,3 +93,17 @@ fn main() {
     println!("{} is {} characters long.", s, s.len());
 }
 ```
+
+# 元组结构体
+```rust
+// 元组结构体定义
+struct Location(i32, i32);
+
+fn main() {
+    // 这仍然是一个在栈上的结构体
+    let loc = Location(42, 32);
+    // 通过下标进行访问
+    println!("{}, {}", loc.0, loc.1);
+}
+
+```
