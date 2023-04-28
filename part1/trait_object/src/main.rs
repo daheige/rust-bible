@@ -1,4 +1,4 @@
-// 特征对象是 Rust 执行动态分发的方式，我们没有实际的具体类型信息。通过跳转到
+// trait object 特征对象是 Rust 执行动态分发的方式，我们没有实际的具体类型信息。通过跳转到
 // vtable 并调用适当的方法完成方法解析。特征对象的另一个用例是，它们允许用户对可以
 // 具有多种类型的集合进行操作，但是在运行时需要额外的间接指针引用开销
 
@@ -28,9 +28,25 @@ impl Area for Rectangle {
     }
 }
 
-// 将特征对象作为函数的参数使用
+// 将trait object作为函数的参数使用，属于动态分发处理
+// 这里将特征对象传递给函数
 fn show_me(item: &dyn Display) {
     println!("{}", item);
+}
+
+// 将 impl trait作为参数，这种仅仅是实现了Display才可以传递给参数
+// 通常建议将特征区间的 impl 特征语法用做函数的返回类型，比如说下面的lazy_add函数。
+// 在参数位置使用它意味着我们不能使用 turbofish 运算符。
+// 如果某些相关代码使用 turbofish 运算符来调用软件包中的
+// 某个方法，那么可能导致 API 不兼容。
+// 对于impl trait 这种，只有当我们没有可用的具体类型时才应该使用它，就像闭包那样。
+fn display_me(item: impl Display) {
+    println!("{}", item);
+}
+
+// 函数返回一个trait
+fn lazy_add(a: i32, b: i32) -> impl Fn() -> i32 {
+    move || a + b
 }
 
 fn main() {
@@ -50,6 +66,12 @@ fn main() {
     }
 
     // show_me("abc"); // ^^^^^ doesn't have a size known at compile-time
-    // 必须通过引用的方式使用
+    // 将特征对象传递给函数，必须通过引用的方式使用，因为它是动态分发机制
     show_me(&"abc");
+
+    // 通过impl trait 参数传递的方式调用函数，跟上面的show_me是不一样的，display_me是impl trait
+    display_me("abc");
+
+    let c = lazy_add(1, 2);
+    println!("result:{}", c());
 }
