@@ -84,7 +84,7 @@ use std::time::Duration;
 
 fn main() {
     println!("Hello, world!");
-    // 1.使用 spawn 创建新线程
+    // 使用 spawn 创建新线程
     thread::spawn(||{
         for i in 1..10{
             println!("spawn thread: current i = {}",i);
