@@ -184,12 +184,12 @@ help: to force the closure to take ownership of `v` (and any other referenced va
 
 ```rust
 // 通过下面的move来解决
-   let handler = thread::spawn(move ||{
-for i in &v {
-println!("i = {}",i);
-}
-
-println!("v = {:?}",v);
+let handler = thread::spawn(move ||{
+    for i in &v {
+        println!("i = {}",i);
+    }
+    
+    println!("v = {:?}",v);
 });
 ```
 
