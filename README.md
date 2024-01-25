@@ -28,7 +28,7 @@
     cargo 1.58.0 (7f08ace4f 2021-11-24)
     升级到指定版本 rust update "1.58.0"
 
-# rust 1.70.x版本的crates发布
+# rust 1.70.x以上版本的crates发布
 ```shell
 cargo publish --registry crates-io
 ```
