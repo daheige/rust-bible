@@ -1,13 +1,25 @@
-# 关于生命周期lifetime
+# 关于生命周期lifetimes
+
+官方权威的lifetimes说明：
+
+- https://github.com/rust-lang/rfcs/blob/master/text/2115-argument-lifetimes.md
+- https://github.com/rust-lang/rfcs/blob/master/text/0141-lifetime-elision.md
+- https://github.com/rust-lang/rfcs/blob/master/text/0556-raw-lifetime.md
+
+lifetimes进一步解释：
+
 - 生命周期纯粹是一个编译期构造，它可以帮助编译器确定某个引用有效的作用域，并
-确保它遵循借用规则。
+  确保它遵循借用规则。
 - 它可以跟踪诸如引用的来源，以及它们是否比借用值生命周期更长这类事情。
 - Rust 中的生命周期能够确保引用的存续时间不超过它指向的值。
 - 生命周期并不是你作为开发人员将要用到的，而是编译器使用和推断引用的有效性时会用到的。
-- 对于rust编译器在编译的时候，如果不能推断变量的作用范围，这个时候就必须显式的标注其生命周期的范围，也就是采用'a,'b这样的生命周期注解来辅助编译器
+- 对于rust编译器在编译的时候，如果不能推断变量的作用范围，这个时候就必须显式的标注其生命周期的范围，也就是采用'a,'
+  b这样的生命周期注解来辅助编译器
 
 # 显式标注生命周期的场景
+
 当 Rust 无法为我们代劳时，有很多地方需要用户指定生命周期，主要体现这些地方：
+
 - 函数签名
 - 结构体和结构体中包含引用任何类型的字段
 - impl 代码块
@@ -76,10 +88,10 @@ struct Decoder<'a, 'b, S, R> {
 
 // 在实现impl的时候也要指定'a,'b，S,R这些泛型参数，先声明后使用
 impl<'a, 'b, S, R> Decoder<'a, 'b, S, R>
-where
-    S: std::fmt::Display,
-    R: std::fmt::Display,
-    'a: 'b, // 这里是指定'a的生命周期比'b长
+    where
+        S: std::fmt::Display,
+        R: std::fmt::Display,
+        'a: 'b, // 这里是指定'a的生命周期比'b长
 {
     fn new(schema: &'a S, reader: &'b R) -> Self {
         Self { schema, reader }
@@ -106,8 +118,8 @@ enum Level {
 struct Logger<'a>(&'a str, Level);
 
 fn configure_logger<T>(t: T)
-where
-    T: Send + 'static + std::fmt::Debug,
+    where
+        T: Send + 'static + std::fmt::Debug,
 {
     println!("t:{:?}", t);
 }
@@ -139,11 +151,13 @@ fn main() {
 }
 
 ```
+
 # 结构体包含引用任何类型的字段
+
 ```rust
 // 结构体中包含引用任何类型的字段时候，需要明确指定这些引用的生命周期
 struct Foo<'a> {
-    i:&'a i32
+    i: &'a i32
 }
 
 fn main() {
@@ -151,20 +165,23 @@ fn main() {
     let foo = Foo {
         i: &x
     };
-    println!("{}",foo.i);
+    println!("{}", foo.i);
 }
 
 ```
 
 # 'static 静态生命周期
+
 - 一个静态变量是一个在编译期间即被创建并存在于整个程序始末的内存资源。他们必须被明确指定类型。
 - 一个静态生命周期是指一段内存资源无限期地延续到程序结束。需要注意的一点是，在此定义之下，一些静态生命周期的资源也可以在运行时被创建。
-- 拥有静态生命周期的资源会拥有一个特殊的生命周期注解 `'static`。 `'static` 资源永远也不会被 drop 释放。 
+- 拥有静态生命周期的资源会拥有一个特殊的生命周期注解 `'static`。 `'static` 资源永远也不会被 drop 释放。
 - 如果静态生命周期资源包含了引用，那么这些引用的生命周期也一定是 'static 的。（任何缺少了此注解的引用都不会达到同样长的存活时间）
 
 内存细节：
+
 - 因为静态变量可以全局性地被任何人访问读取而潜在地引入数据争用，所以修改它具有内在的危险性
 - Rust 允许使用 unsafe { ... } 代码块来进行一些无法被编译器担保的内存操作
+
 ```rust
 // 定义静态生命周期的额变量，在定义的时候必须指定类型
 static PI: f64 = 3.1415;
