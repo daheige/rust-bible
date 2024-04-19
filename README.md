@@ -77,6 +77,10 @@ cargo publish --registry crates-io
     [http]
     check-revoke = false
 
+# docker环境搭建参考
+- https://github.com/rust-lang/docker-rust/tree/master/1.77.2
+- https://github.com/daheige/pyo3-in-action/blob/main/Dockerfile
+
 # rust编辑器选择
 可以使用vscode,clion都可以
 
