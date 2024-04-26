@@ -15,5 +15,6 @@ cc = "1.0.95"
 # 参考文档
 
 - https://llever.com/rust-cookbook-zh/development_tools/build_tools.zh.html
+- https://rustwiki.org/zh-CN/rust-cookbook/development_tools/build_tools.html
 - https://nomicon.purewhite.io/ffi.html
 - https://docs.rs/cc/latest/cc/struct.Build.html#method.compile
