@@ -6,6 +6,8 @@ use std::ffi::CString;
 use std::io::{stdin, stdout, Write};
 use std::os::raw::c_char;
 
+// 在 Rust 中想使用cc库，可以通过在extern块中，定义外部函数签名。
+// 使用cc时候，一个静态库文件将被生成（在这情况下，就是libfoo.a），也即是foo.c会生成libfoo.a文件
 // 链接的文件为foo
 #[link(name = "foo")]
 extern "C" {
