@@ -12,5 +12,5 @@ fn main() {
         )
         .define("WELCOME", None)
         .file("foo.c")
-        .compile("foo");
+        .compile("foo"); // // 输出 `libfoo.a`
 }
