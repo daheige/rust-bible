@@ -11,3 +11,9 @@ cc = "1.0.95"
 
 执行cargo check 和 cargo run运行效果如下图所示：
 ![](cc-demo.jpg)
+
+# 参考文档
+
+- https://llever.com/rust-cookbook-zh/development_tools/build_tools.zh.html
+- https://nomicon.purewhite.io/ffi.html
+- https://docs.rs/cc/latest/cc/struct.Build.html#method.compile
