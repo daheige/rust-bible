@@ -32,10 +32,11 @@ pub fn call() -> Result<(), Box<dyn Error>> {
 }
 
 fn prompt(s: &str) -> Result<String, Box<dyn Error>> {
-    print!("{}", s);
-    stdout().flush()?; // 从终端中获取内容
+    print!("{}", s); // 需要输入之前的提示语
+    stdout().flush()?;
+    // 从终端中读取输入的内容
     let mut input = String::new();
-    stdin().read_line(&mut input)?; // 读取输入的内容
+    stdin().read_line(&mut input)?;
     Ok(input.trim().to_string())
 }
 
