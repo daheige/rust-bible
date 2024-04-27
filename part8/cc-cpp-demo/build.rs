@@ -3,5 +3,7 @@ fn main() {
     cc::Build::new()
         .cpp(true)
         .file("src/foo.cpp")
+        .warnings(false) // 忽略警告
+        .flag("-std=c++11") // 通过c11进行编译
         .compile("foo"); // 编译后名字libfoo.a
 }
