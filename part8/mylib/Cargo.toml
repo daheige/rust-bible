@@ -1,0 +1,12 @@
+[package]
+name = "mylib"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "mylib" # 链接库名字
+#配置 Rust 生成两种库——静态库（staticlib）和 C动态库（cdylib）
+crate-type = ["staticlib", "cdylib"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[dependencies]
