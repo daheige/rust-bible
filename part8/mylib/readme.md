@@ -63,6 +63,6 @@ sh bin/static-run.sh
 运行效果如下图所示：
 ![](c-run.jpg)
 从图中可以看出，c动态链接和静态链接libmylib的两种方式，都是可以正常运行成功的。
-本示例通过编写rust代码，并通过ffi调用的方式，在c语言中实现了调用rust编写的代码，这种ffi调用的思路，为c和rust的互通性提供了便利。
-关于rust中如何调用c/c++代码，你可以看part8/cc-demo和part8/cc-cpp-demo，这两个示例中有详细的使用方法，希望对你学习ffi调用有所启发和帮助。
 
+- 本示例通过编写rust代码，并通过ffi调用的方式，在c语言中实现了调用rust编写的代码，这种ffi调用的思路，为c和rust的互通性提供了便利。
+- 关于rust中如何调用c/c++代码，你可以看part8/cc-demo和part8/cc-cpp-demo，这两个示例中有详细的使用方法，希望对你学习ffi调用有所启发和帮助。
