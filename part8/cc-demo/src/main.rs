@@ -12,6 +12,7 @@ use std::os::raw::c_char;
 #[link(name = "foo")]
 extern "C" {
     // 这个标识标识在rust语言中通过ffi方式引入C语言的代码
+    // 也就是说通过extern块引入C语言定义的代码
     fn foo();
     fn greet(name: *const c_char);
     fn print_app_info();
