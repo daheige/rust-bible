@@ -11,6 +11,6 @@ fn main() {
             format!("\"{}\"", env!("CARGO_PKG_VERSION")).as_str(),
         )
         .define("WELCOME", None)
-        .file("foo.c")
+        .file("src/foo.c")
         .compile("foo"); // // 输出 `libfoo.a`
 }
