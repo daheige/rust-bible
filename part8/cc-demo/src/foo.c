@@ -6,9 +6,12 @@
 
 void print_app_info() {
     // 如果没有定义WELCOME宏
+#ifdef WELCOME
+    // 调用strcmp函数比较WELCOME宏字符串是否为YES
     if (strcmp(WELCOME, "YES") == 0) {
         printf("welcome to ");
     }
+#endif
 
     // 输出build.rs中定义的APP_NAME和VERSION
     printf("%s - current version:%s\n", APP_NAME, VERSION);
