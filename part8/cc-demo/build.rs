@@ -10,7 +10,7 @@ fn main() {
             "VERSION",
             format!("\"{}\"", env!("CARGO_PKG_VERSION")).as_str(),
         )
-        .define("WELCOME", None)
+        .define("WELCOME", "YES")
         .file("src/foo.c")
-        .compile("foo"); // // 输出 `libfoo.a`
+        .compile("foo"); // // 编译输出的文件会有lib的前缀，也就是会在debug/build/cc-demo-xxx目录中生成libfoo.a文件
 }
