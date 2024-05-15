@@ -13,16 +13,16 @@ use std::os::raw::c_char;
 extern "C" {
     // 这个标识标识在rust语言中通过ffi方式引入C语言的代码
     // 也就是说通过extern块引入C语言定义的代码
-    fn foo();
+    fn hello();
     fn greet(name: *const c_char);
     fn print_app_info();
 }
 
 // 调用c提供的foo函数
 pub fn call() -> Result<(), Box<dyn Error>> {
-    // 调用foo函数，它是相对来说安全的函数，所以这里需要加上unsafe关键字
+    // 调用hello函数，它是相对来说安全的函数，所以这里需要加上unsafe关键字
     unsafe {
-        foo();
+        hello();
     }
 
     let name = prompt("what's your name?")?;
@@ -48,6 +48,6 @@ fn main() {
         print_app_info();
     }
 
-    println!("cc call begin...");
+    println!("call c code begin...");
     let _ = call();
 }

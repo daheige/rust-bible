@@ -5,12 +5,15 @@
 fn main() {
     // 编译之后的名字为foo
     cc::Build::new()
-        .define("APP_NAME", "\"foo\"")
+        .define(
+            "APP_NAME",
+            format!("\"{}\"", env!("CARGO_PKG_NAME")).as_str(),
+        )
         .define(
             "VERSION",
             format!("\"{}\"", env!("CARGO_PKG_VERSION")).as_str(),
         )
-        .define("WELCOME", "YES")
+        .define("WELCOME", "\"YES\"")
         .file("src/foo.c")
         .compile("foo"); // // 编译输出的文件会有lib的前缀，也就是会在debug/build/cc-demo-xxx目录中生成libfoo.a文件
 }

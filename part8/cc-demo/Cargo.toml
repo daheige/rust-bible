@@ -7,5 +7,6 @@ edition = "2021"
 
 [dependencies]
 
+# cargo build构建时的依赖库
 [build-dependencies]
 cc = "1.0.95"
