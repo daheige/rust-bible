@@ -47,7 +47,7 @@ cargo publish --registry crates-io
     export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
     export PATH="$HOME/.cargo/bin:$PATH"
 
-	在用户目录.cargo文件夹或在与Cargo.toml同级目录.cargo文件夹下创建config文件
+	在用户目录.cargo目录目录中创建config文件（高版本是config.toml）
 	$cd ~/.cargo/
 	$touch config
 	添加如下内容：
@@ -82,6 +82,62 @@ cargo publish --registry crates-io
     git-fetch-with-cli=true
     [http]
     check-revoke = false
+
+# 使用rsproxy代理安装rust更快
+步骤一：设置 Rustup 镜像， 修改配置 ~/.zshrc or ~/.bashrc
+```shell
+export RUSTUP_DIST_SERVER="https://rsproxy.cn"
+export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
+```
+步骤二：安装 Rust（请先完成步骤一的环境变量导入并 source rc 文件或重启终端生效）
+```shell
+curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh
+```
+
+步骤三：设置 crates.io 镜像， 修改配置 ~/.cargo/config，已支持git协议和sparse协议，Rust >=1.68 版本建议使用 sparse-index，速度更快。
+```toml
+# 指定镜像
+replace-with = 'rsproxy'
+
+# 使用rsproxy
+[source.crates-io]
+replace-with = 'rsproxy-sparse'
+
+[source.rsproxy]
+registry = "https://rsproxy.cn/crates.io-index"
+[source.rsproxy-sparse]
+registry = "sparse+https://rsproxy.cn/index/"
+[registries.rsproxy]
+index = "https://rsproxy.cn/crates.io-index"
+
+# rust源码地址
+#[source.crates-io]
+#registry = "https://github.com/rust-lang/crates.io-index"
+
+# 清华大学
+[source.tuna]
+registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
+
+# 中国科学技术大学
+[source.ustc]
+registry = "https://mirrors.ustc.edu.cn/crates.io-index"
+#registry = "git://mirrors.ustc.edu.cn/crates.io-index"
+
+# 上海交通大学
+[source.sjtu]
+registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index"
+
+# rustcc社区
+[source.rustcc]
+registry = "git://crates.rustcc.cn/crates.io-index"
+
+[source.aliyun]
+registry = "https://code.aliyun.com/rustcc/crates.io-index"
+[net]
+git-fetch-with-cli=true
+[http]
+check-revoke = false
+```
 
 # docker环境搭建参考
 
