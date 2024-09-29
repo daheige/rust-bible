@@ -39,49 +39,66 @@ cargo publish --registry crates-io
 ```
 
 # 设置rust国内镜像
+https://mirrors.tuna.tsinghua.edu.cn/help/rustup/
 
-    https://mirrors.tuna.tsinghua.edu.cn/help/rustup/
+国内提高访问速度，建议设置环境变量: vim ~/.bash_profile
+```shell
+export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup
+export RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup
+export PATH="$HOME/.cargo/bin:$PATH"
+```
+执行source ~/.bash_profile生效
 
-	国内提高访问速度，建议设置环境变量 
-    export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
-    export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
-    export PATH="$HOME/.cargo/bin:$PATH"
+在用户目录.cargo目录目录中创建config.toml
+```shell
+cd ~/.cargo/
+touch config.toml
+```
+添加如下内容：
+```toml
+# 指定镜像
+replace-with = 'tuna'
 
-	在用户目录.cargo目录目录中创建config文件（高版本是config.toml）
-	$cd ~/.cargo/
-	$touch config
-	添加如下内容：
-	# 指定镜像
-    #replace-with = 'sjtu'
-    replace-with = 'ustc'
-    
-    # 源码地址
-    [source.crates-io]
-    registry = "https://github.com/rust-lang/crates.io-index"
-    
-    # 清华大学
-    [source.tuna]
-    registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
-    
-    # 中国科学技术大学
-    [source.ustc]
-    registry = "https://mirrors.ustc.edu.cn/crates.io-index"
-    #registry = "git://mirrors.ustc.edu.cn/crates.io-index"
-    
-    # 上海交通大学
-    [source.sjtu]
-    registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index"
-    
-    # rustcc社区
-    [source.rustcc]
-    registry = "git://crates.rustcc.cn/crates.io-index"
-    
-    [source.aliyun]
-    registry = "https://code.aliyun.com/rustcc/crates.io-index"
-    [net]
-    git-fetch-with-cli=true
-    [http]
-    check-revoke = false
+# 源码地址
+[source.crates-io]
+registry = "https://github.com/rust-lang/crates.io-index"
+
+# 清华大学
+[source.tuna]
+registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
+
+# 中国科学技术大学
+[source.ustc]
+registry = "https://mirrors.ustc.edu.cn/crates.io-index"
+
+# 上海交通大学
+[source.sjtu]
+registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index"
+
+# rustcc社区
+[source.rustcc]
+registry = "git://crates.rustcc.cn/crates.io-index"
+
+[source.aliyun]
+registry = "https://code.aliyun.com/rustcc/crates.io-index"
+[net]
+git-fetch-with-cli=true
+[http]
+check-revoke = false
+```
+或者直接使用如下配置：
+```toml
+[source.crates-io]
+replace-with = 'mirror' # 直接替换为mirror为tuna镜像
+
+[source.mirror]
+registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
+
+[net]
+git-fetch-with-cli=true
+[http]
+check-revoke = false
+```
 
 # 使用rsproxy代理安装rust更快
 步骤一：设置 Rustup 镜像， 修改配置 ~/.zshrc or ~/.bashrc
@@ -94,11 +111,8 @@ export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
 curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh
 ```
 
-步骤三：设置 crates.io 镜像， 修改配置 ~/.cargo/config，已支持git协议和sparse协议，Rust >=1.68 版本建议使用 sparse-index，速度更快。
+步骤三：设置 crates.io 镜像， 修改配置 ~/.cargo/config.toml，已支持git协议和sparse协议，Rust >=1.68 版本建议使用 sparse-index，速度更快。
 ```toml
-# 指定镜像
-replace-with = 'rsproxy'
-
 # 使用rsproxy
 [source.crates-io]
 replace-with = 'rsproxy-sparse'
@@ -109,30 +123,6 @@ registry = "https://rsproxy.cn/crates.io-index"
 registry = "sparse+https://rsproxy.cn/index/"
 [registries.rsproxy]
 index = "https://rsproxy.cn/crates.io-index"
-
-# rust源码地址
-#[source.crates-io]
-#registry = "https://github.com/rust-lang/crates.io-index"
-
-# 清华大学
-[source.tuna]
-registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
-
-# 中国科学技术大学
-[source.ustc]
-registry = "https://mirrors.ustc.edu.cn/crates.io-index"
-#registry = "git://mirrors.ustc.edu.cn/crates.io-index"
-
-# 上海交通大学
-[source.sjtu]
-registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index"
-
-# rustcc社区
-[source.rustcc]
-registry = "git://crates.rustcc.cn/crates.io-index"
-
-[source.aliyun]
-registry = "https://code.aliyun.com/rustcc/crates.io-index"
 [net]
 git-fetch-with-cli=true
 [http]
