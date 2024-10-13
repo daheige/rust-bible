@@ -56,12 +56,11 @@ touch config.toml
 ```
 添加如下内容：
 ```toml
-# 指定镜像
-replace-with = 'tuna'
-
 # 源码地址
 [source.crates-io]
-registry = "https://github.com/rust-lang/crates.io-index"
+#registry = "https://github.com/rust-lang/crates.io-index"
+# 指定镜像，可以根据实际情况选择不同的镜像
+replace-with = 'tuna'
 
 # 清华大学
 [source.tuna]
