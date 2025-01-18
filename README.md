@@ -19,7 +19,7 @@
 - https://www.rust-lang.org/zh-CN/tools/install
 - https://kaisery.github.io/trpl-zh-cn/ch01-01-installation.html
 
-安装步骤：
+安装步骤：(以linux系统为例，这里我使用的是ubuntu系统）
 ```shell
 export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
 export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
@@ -38,6 +38,14 @@ export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
 export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
 sh rustup-install.sh
 ```
+为了后续rust组件或工具快速升级，建议设置环境变量:  vim ~/.bashrc 或者 vim ~/.bash_profile（这里需要根据实际情况设置，对于centos系统来说执行 vim ~/.bash_profile）
+```shell
+export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
+export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
+export PATH="$HOME/.cargo/bin:$PATH"
+```
+
+执行`source ~/.bashrc`或者 `source ~/.bash_profile` 生效
 
 # rustup升级rust
 ```shell
@@ -60,7 +68,7 @@ cargo publish --registry crates-io
 - https://mirrors.ustc.edu.cn/help/rust-static.html
 - https://mirrors.ustc.edu.cn/help/crates.io-index.html
 
-国内提高访问速度，建议设置环境变量: vim ~/.bash_profile或者vim ~/.bashrc
+为了提高访问速度，建议设置环境变量: vim ~/.bash_profile 或者vim ~/.bashrc
 ```shell
 export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
 export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
@@ -119,7 +127,7 @@ check-revoke = false
 ```
 
 # 使用rsproxy代理安装rust更快
-步骤一：设置 Rustup 镜像， 修改配置 ~/.zshrc or ~/.bashrc
+步骤一：设置 Rustup 镜像， 修改配置 ~/.zshrc 或者 ~/.bashrc 或者 ~/.bash_profile 文件
 ```shell
 export RUSTUP_DIST_SERVER="https://rsproxy.cn"
 export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
