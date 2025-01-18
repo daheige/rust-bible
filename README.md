@@ -3,7 +3,7 @@
     基于rust edition = "2021" 
     需要安装rust v1.58.0 以上版本
 
-# rust从入门到实战--7大块
+# rust从入门到实战
 
 - part1 rust基础,thread concurrent编程初体验
 - part2 serde json序列化处理，yaml文件读取，log日志库基础操作
