@@ -15,31 +15,37 @@
 - part8 rust ffi调用
 
 # rust安装
-
+参考文档：
 - https://www.rust-lang.org/zh-CN/tools/install
 - https://kaisery.github.io/trpl-zh-cn/ch01-01-installation.html
 
-  建议安装到rust v1.58.0+版本
-  shell安装
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-  
-  rust升级执行如下操作：
-  rustup update
+安装步骤：
+```shell
+export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
+export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
 
-  rust版本查看
-  cargo --version
-  cargo 1.58.0 (7f08ace4f 2021-11-24)
-  升级到指定版本 rust update "1.58.0"
+# rustup升级rust
+```shell
+rustup update
+```
+rust版本查看
+```shell
+rustc --version
+cargo --version
+```
 
 # rust 1.70.x以上版本的crates发布
-
+需要添加--registry参数
 ```shell
 cargo publish --registry crates-io
 ```
 
 # 设置rust国内镜像
-https://mirrors.ustc.edu.cn/help/rust-static.html
-https://mirrors.ustc.edu.cn/help/crates.io-index.html
+参考文档
+- https://mirrors.ustc.edu.cn/help/rust-static.html
+- https://mirrors.ustc.edu.cn/help/crates.io-index.html
 
 国内提高访问速度，建议设置环境变量: vim ~/.bash_profile或者vim ~/.bashrc
 ```shell
