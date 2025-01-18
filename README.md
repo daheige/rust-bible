@@ -40,7 +40,7 @@ export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
 export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
 sh rustup-install.sh
 ```
-为了后续rust组件或工具快速升级，建议设置环境变量:  vim ~/.bashrc 或者 vim ~/.bash_profile（这里需要根据实际情况设置，对于centos系统来说执行 vim ~/.bash_profile）
+为了后续rust组件或工具快速升级，建议设置环境变量: `vim ~/.bashrc` （这里需要根据实际情况设置，对于centos系统来说执行 vim ~/.bash_profile）
 ```shell
 export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
 export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
