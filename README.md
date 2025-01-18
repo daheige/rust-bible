@@ -21,9 +21,8 @@
 
   建议安装到rust v1.58.0+版本
   shell安装
-  curl https://sh.rustup.rs -sSf | sh
-  对于centos7安装请看 rust-centos7-install.md
-
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+  
   rust升级执行如下操作：
   rustup update
 
@@ -39,12 +38,13 @@ cargo publish --registry crates-io
 ```
 
 # 设置rust国内镜像
-https://mirrors.tuna.tsinghua.edu.cn/help/rustup/
+https://mirrors.ustc.edu.cn/help/rust-static.html
+https://mirrors.ustc.edu.cn/help/crates.io-index.html
 
-国内提高访问速度，建议设置环境变量: vim ~/.bash_profile
+国内提高访问速度，建议设置环境变量: vim ~/.bash_profile或者vim ~/.bashrc
 ```shell
-export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup
-export RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup
+export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
+export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
 export PATH="$HOME/.cargo/bin:$PATH"
 ```
 执行source ~/.bash_profile生效
@@ -60,7 +60,7 @@ touch config.toml
 [source.crates-io]
 #registry = "https://github.com/rust-lang/crates.io-index"
 # 指定镜像，可以根据实际情况选择不同的镜像
-replace-with = 'tuna'
+replace-with = 'ustc'
 
 # 清华大学
 [source.tuna]
@@ -68,7 +68,7 @@ registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
 
 # 中国科学技术大学
 [source.ustc]
-registry = "https://mirrors.ustc.edu.cn/crates.io-index"
+registry = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
 
 # 上海交通大学
 [source.sjtu]
@@ -129,7 +129,6 @@ check-revoke = false
 ```
 
 # docker环境搭建参考
-
 - https://github.com/rust-lang/docker-rust/tree/master/1.77.2
 - https://github.com/daheige/pyo3-in-action/blob/main/Dockerfile
 
