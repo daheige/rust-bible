@@ -16,7 +16,7 @@
 - part7 rust实战(rust web/job/grpc）综合使用
 - part8 rust ffi调用
 
-# rust安装
+# rust install
 参考文档：
 - https://www.rust-lang.org/zh-CN/tools/install
 - https://kaisery.github.io/trpl-zh-cn/ch01-01-installation.html
