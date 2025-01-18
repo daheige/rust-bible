@@ -26,8 +26,7 @@ export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-如果上述安装过程中比较慢，还可以使用如下方式安装rust
-也就是说，第一次安装 rustup 的时候，如果按照官网教程 https://sh.rustup.rs 链接可能无法下载，可以先执行如下命令下载sh文件：
+如果上述安装过程中比较慢，还可以使用如下方式安装rust。也就是说，第一次安装 rustup 的时候，如果按照官网教程 https://sh.rustup.rs 链接可能无法下载，可以先执行如下命令下载sh文件：
 ```shell
 wget https://mirrors.ustc.edu.cn/misc/rustup-install.sh
 ```
